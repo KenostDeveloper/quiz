@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Quiz</title>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
+<title>MST</title>
+<link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+<link rel="manifest" href="img/favicon/site.webmanifest">
+<link rel="mask-icon" href="img/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#00aba9">
+<meta name="theme-color" content="#282828">
+<link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="libs/owlcarousel2/dist/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="libs/fontawesome5/css/all.min.css">
+<link rel="stylesheet" href="libs/fontawesome5/css/v4-shims.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="libs/fancybox/dist/jquery.fancybox.min.css">
+<link rel="stylesheet" href="libs/jquery-ui/jquery-ui.min.css">
+<link rel="stylesheet" href="libs/icofont.css">
+<link rel="stylesheet" href="css/style.css?id=90">
+  </head>
+</head>
+<body>
+  <div class="dart_wrapper bacground-dark">
+    <main class="dart_main">
+      <section class="dart-section">
+        <div class="dart_container">
+          <p class="quiz-title mt-5 mb-3">Текстовый ответ</p>
+          <div class="dart-row">
+            <div class="d-col-3">
+              <div class="quiz-button-radio">
+                <input class="quiz-button-radio__input" name="radio" id="radio1" type="radio">
+                <label class="quiz-button-radio__label" for="radio1">Вариант 1</label>
+              </div>
+              <div class="quiz-button-radio">
+                <input class="quiz-button-radio__input" name="radio" id="radio2" type="radio">
+                <label class="quiz-button-radio__label" for="radio2">Вариант 1</label>
+              </div>
+              <div class="quiz-button-radio">
+                <input class="quiz-button-radio__input" name="radio" id="radio3" type="radio">
+                <label class="quiz-button-radio__label" for="radio3">Вариант 1</label>
+              </div>
+            </div>
+          </div>
+
+          <p class="quiz-title mt-5 mb-3">Текстовый ответ с несколькими вариантами</p>
+          <div class="dart-row">
+            <div class="d-col-3">
+              <div class="quiz-button-checkbox">
+                <input class="quiz-button-checkbox__input" name="radio" id="radio4" type="checkbox">
+                <label class="quiz-button-checkbox__label" for="radio4">Вариант 1</label>
+              </div>
+              <div class="quiz-button-checkbox">
+                <input class="quiz-button-checkbox__input" name="radio" id="radio5" type="checkbox">
+                <label class="quiz-button-checkbox__label" for="radio5">Вариант 1</label>
+              </div>
+              <div class="quiz-button-checkbox">
+                <input class="quiz-button-checkbox__input" name="radio" id="radio6" type="checkbox">
+                <label class="quiz-button-checkbox__label" for="radio6">Вариант 1</label>
+              </div>
+            </div>
+          </div>
+
+          <p class="quiz-title mt-5 mb-3">Поле для ввода</p>
+          <div class="dart-row">
+            <div class="d-col-3">
+              <div class="quiz-input">
+                <label class="quiz-input__label">Имя</label>
+                <input class="quiz-input__input" type="text" placeholder="Введите текст">
+              </div>
+            </div>
+          </div>
+
+          <p class="quiz-title mt-5 mb-3">Ползунок</p>
+          <div class="dart-row">
+            <div class="d-col-3">
+              <div class="quiz-range">
+                <label class="quiz-range__label">0</label>
+                <input value="20" min="0" max="100" step="1" class="quiz-range__input" type="range" placeholder="Введите текст">
+              </div>
+            </div>
+          </div>
+
+          <p class="quiz-title mt-5 mb-3">Картинка с выбором 1 варианта</p>
+          <div class="dart-row">
+            <div class="d-col-2">
+              <div class="quiz-image-radio">
+                <input class="quiz-image-radio__input" name="radio1" type="radio" id="radio-image-1">
+                <label class="quiz-image-radio__label" for="radio-image-1">
+                  <img class="quiz-image-radio__image" src="/img/imagination.png" alt="">
+                  <p class="quiz-image-radio__text">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+                </label>
+              </div>
+            </div>
+            <div class="d-col-2">
+              <div class="quiz-image-radio">
+                <input class="quiz-image-radio__input" name="radio1" type="radio" id="radio-image-2">
+                <label class="quiz-image-radio__label" for="radio-image-2">
+                  <img class="quiz-image-radio__image" src="/img/imagination.png" alt="">
+                  <p class="quiz-image-radio__text">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+                </label>
+              </div>
+            </div>
+            <div class="d-col-2">
+              <div class="quiz-image-radio">
+                <input class="quiz-image-radio__input" name="radio1" type="radio" id="radio-image-3">
+                <label class="quiz-image-radio__label" for="radio-image-3">
+                  <img class="quiz-image-radio__image" src="/img/imagination.png" alt="">
+                  <p class="quiz-image-radio__text">Lorem ipsum dolor sit</p>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <p class="quiz-title mt-5 mb-3">Картинка с выбором нескольких вариантов</p>
+          <div class="dart-row">
+            <div class="d-col-2">
+              <div class="quiz-image-checkbox">
+                <input class="quiz-image-checkbox__input" name="checkbox1" type="checkbox" id="checkbox-image-1">
+                <label class="quiz-image-checkbox__label" for="checkbox-image-1">
+                  <img class="quiz-image-checkbox__image" src="/img/imagination.png" alt="">
+                  <p class="quiz-image-checkbox__text">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+                </label>
+              </div>
+            </div>
+            <div class="d-col-2">
+              <div class="quiz-image-checkbox">
+                <input class="quiz-image-checkbox__input" name="checkbox1" type="checkbox" id="checkbox-image-2">
+                <label class="quiz-image-checkbox__label" for="checkbox-image-2">
+                  <img class="quiz-image-checkbox__image" src="/img/quiztest.webp" alt="">
+                  <p class="quiz-image-checkbox__text">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+                </label>
+              </div>
+            </div>
+            <div class="d-col-2">
+              <div class="quiz-image-checkbox">
+                <input class="quiz-image-checkbox__input" name="checkbox1" type="checkbox" id="checkbox-image-3">
+                <label class="quiz-image-checkbox__label" for="checkbox-image-3">
+                  <img class="quiz-image-checkbox__image" src="/img/quiztest.jpg" alt="">
+                  <p class="quiz-image-checkbox__text">Lorem ipsum dolor sit</p>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const progress = document.querySelectorAll('.quiz-range__input');
+    console.log(progress)
+  if(progress){
+    progress.forEach(elem => {
+      elem.addEventListener('input', () => {
+        const value = elem.value;
+        elem.style.background = `linear-gradient(to right, #6A6DCD 0%, #6A6DCD ${value}%, #2F445F ${value}%, #2F445F 100%)`
+      });
+    });
+  }
+  </script>
+</body>
+</html>
