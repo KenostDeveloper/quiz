@@ -1,0 +1,48 @@
+<script setup>
+
+const props = defineProps(['options', 'placeholder'])
+
+</script>
+
+<template>
+  <div v-for="(item, index) in props.options" v-bind:key="item.index">
+    <div class="quiz-input">
+        <label class="quiz-input__label" v-bind:id="'input_'+index">{{ item.label }}</label>
+        <input class="quiz-input__input" type="text" v-bind:placeholder="item.placeholder">
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+
+
+.quiz-input{
+    display: flex;
+    flex-direction: column;
+    color: #828282;
+    font-size: 16px;
+    // margin-bottom: 16px;
+    
+
+    &__input{
+        width: 100%;
+        padding: 10px 16px;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        position: relative;
+        border-radius: 8px;
+        color: #000000;
+        font-size: 16px;
+        border: 3px solid #c9c9c9;
+        border-bottom: 5px solid #c9c9c9;
+        outline: none;
+    }
+
+    &__label{
+        margin-bottom: 6px;
+        font-size: 18px;
+    }
+}
+
+</style>
