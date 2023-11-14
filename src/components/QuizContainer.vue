@@ -4,10 +4,16 @@ import QuizRadioButton from './QuizRadioButton.vue';
 import QuizCheckbox from './QuizCheckbox.vue';
 import QuizInput from './QuizInput.vue';
 import QuizRange from './QuizRange.vue';
+import QuizCheackboxImage from './QuizCheackboxImage.vue'
+import QuizRadioButtonImage from './QuizRadioButtonImage.vue'
+import QuizTextAndImage from './QuizTextAndImage.vue'
+import QuizFormFields from './QuizFormFields.vue'
 import {ref, computed} from 'vue';
 
 const props = defineProps(['question'])
 const questions = props.question
+let progressNumber = 0;
+let progress;
 
 const currentQuestion = ref(0);
 
@@ -21,11 +27,14 @@ const getCurrentQuestion = computed(() => {
 const NextQuestion = () => {
 	if (currentQuestion.value < questions.length - 1) {
 		currentQuestion.value++
+        progressNumber = currentQuestion.value / (questions.length - 1) * 100;
+        progress = progressNumber + '%';
 		return
 	}
 }
 
 </script>
+
 
 <template>
     <div class="quiz-container">
@@ -41,17 +50,38 @@ const NextQuestion = () => {
             
         </div>
         <div v-if="getCurrentQuestion.type > 0" class="quiz-container__quiz">
-            <QuizTitle :title=getCurrentQuestion.question></QuizTitle>
+            <QuizTitle v-if="currentQuestion <= questions.length - 2" :title=getCurrentQuestion.question></QuizTitle>
             <div class="quiz-container__content">
-                <div class="quiz-container__items">
-                    <QuizRadioButton v-if="getCurrentQuestion.type == 1" :options=getCurrentQuestion.options></QuizRadioButton>
-                    <QuizCheckbox v-if="getCurrentQuestion.type == 2" :options=getCurrentQuestion.options></QuizCheckbox>
-                    <QuizInput v-if="getCurrentQuestion.type == 3" :options=getCurrentQuestion.options ></QuizInput>
-                    <QuizRange v-if="getCurrentQuestion.type == 4" :options=getCurrentQuestion.options :settings=getCurrentQuestion.settings></QuizRange>
+                <QuizRadioButton class="quiz-colom-2" v-if="getCurrentQuestion.type == 1" :options=getCurrentQuestion.options></QuizRadioButton>
+                <QuizCheckbox class="quiz-colom-2" v-if="getCurrentQuestion.type == 2" :options=getCurrentQuestion.options></QuizCheckbox>
+                <QuizInput class="quiz-colom-2" v-if="getCurrentQuestion.type == 3" :options=getCurrentQuestion.options ></QuizInput>
+                <QuizRange v-if="getCurrentQuestion.type == 4" :settings=getCurrentQuestion.settings></QuizRange>
+                <QuizCheackboxImage class="quiz-colom-4" v-if="getCurrentQuestion.type == 5" :options="getCurrentQuestion.options"></QuizCheackboxImage>
+                <QuizRadioButtonImage class="quiz-colom-4" v-if="getCurrentQuestion.type == 6" :options="getCurrentQuestion.options"></QuizRadioButtonImage>
+                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 7">
+                    <QuizRadioButton class="imageAndOptions__options quiz-colom-2" :options=getCurrentQuestion.options></QuizRadioButton>
+                    <img :src="getCurrentQuestion.imgPath" alt="">
                 </div>
+                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 8">
+                    <QuizCheckbox class="imageAndOptions__options quiz-colom-2" :options=getCurrentQuestion.options></QuizCheckbox>
+                    <img :src="getCurrentQuestion.imgPath" alt="">
+                </div>
+                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 9">
+                    <QuizInput class="imageAndOptions__options quiz-colom-2" :options=getCurrentQuestion.options></QuizInput>
+                    <img :src="getCurrentQuestion.imgPath" alt="">
+                </div>
+                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 10">
+                    <QuizRange class="imageAndOptions__options" :settings=getCurrentQuestion.settings></QuizRange>
+                    <img :src="getCurrentQuestion.imgPath" alt="">
+                </div>
+                <QuizTextAndImage v-if="getCurrentQuestion.type == 11" :imgPath=getCurrentQuestion.imgPath :text=getCurrentQuestion.text></QuizTextAndImage>
+                <QuizFormFields v-if="getCurrentQuestion.type == 12" :title=getCurrentQuestion.question :options=getCurrentQuestion.options :settings="getCurrentQuestion.settings"></QuizFormFields>
             </div>
-            <div class="quiz-container-bottom-menu">
-                <div class="quiz-container__step-count"><span>{{currentQuestion }}</span>/ {{questions.length - 1}}</div>
+            <div class="quiz-container-bottom-menu" v-if="currentQuestion <= questions.length - 2">
+                <div class="quiz-container__step-count">
+                    <span>{{currentQuestion}}</span>/ {{questions.length - 2}}
+                    <div class="quiz-container__progress-bar"><div class="quiz-container__progress"></div></div>
+                </div>
                 <div @click="NextQuestion" class="then-button">Далее</div>
             </div>
         </div>
@@ -61,10 +91,58 @@ const NextQuestion = () => {
 </template>
 
 <style scoped lang="scss">
+
+.quiz-colom-2{
+    grid-template-columns: 1fr 1fr;
+}
+
+.quiz-colom-4{
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+
+.imageAndOptions{
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    gap: 20px;
+
+    &__options{
+        width: 65%;
+        overflow-y: auto;
+    }
+
+    img{
+        width: 35%;
+        position: sticky;
+        top: 0;
+    }
+}
 .quiz-container{
         display: flex;
         background-color: #ffffff;
         border-radius: 32px;
+
+        &__progress{
+            // width: v-bind(progress);
+            height: 6px;
+            background-color: #ae2f6a;
+            position: relative;
+            left: 3px;
+            border-radius: 5px;
+        }
+
+        &__progress-bar{
+            width: 70%;
+            height: 10px;
+            background-color: #c9c9c9;
+            border-radius: 8px;
+            margin-left: 15px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
 
         &__quiz-start{
             width: 100%;
@@ -82,6 +160,7 @@ const NextQuestion = () => {
             align-items: flex-start;
             width: 100%;
             height: 100%;
+            display: flex;
         }
 
         &__header{
@@ -139,20 +218,10 @@ const NextQuestion = () => {
 
         &__content{
             width: 100%;
-            height: calc(100% - 80px);
+            height: 100%;
             overflow-y: auto;
         }
 
-        &__items{
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-auto-rows: min-content;
-            grid-gap: 16px;
-            padding-bottom: 6px;
-            max-height: 100%;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
 
         &__step-count{
             font-family: 'Roboto', sans-serif;
@@ -161,6 +230,7 @@ const NextQuestion = () => {
             display: flex;
             align-items: center;
             gap: 2px;
+            width: 100%;
 
             span{
                 font-size: 18px;
@@ -173,9 +243,11 @@ const NextQuestion = () => {
         align-items: center;
         justify-content: space-between;
         width: 100%;
+        margin-top: 10px;
     }
 
     .then-button{
+        font-family: "Roboto", sans-serif;
         background: #d13980;
         color: #fff;
         padding: 8px 24px;
@@ -186,4 +258,121 @@ const NextQuestion = () => {
             background: #ae2f6a;
         }
     }
+
+    
+@media only screen and (max-width: 1200px) { 
+    .quiz-container{
+        &__img{
+            width: 50%;
+        }
+        &__info{
+            width: 50%;
+        }
+    }
+
+    .quiz-colom-4{
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .imageAndOptions{
+        .quiz-colom-2{
+        grid-template-columns: 1fr;
+    }
+    }
+}
+
+@media only screen and (max-width: 991px) { 
+    .quiz-container{
+        &__quiz-start{
+            flex-direction: column;
+        }
+
+        &__img{
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            height: 60%;
+
+            img{
+                width: 100% !important;
+            }
+        }
+
+        &__info{
+            width: 100%;
+            height: 40%;
+        }
+    }
+
+    .quiz-colom-4{
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .imageAndOptions{
+        flex-direction: column-reverse;
+        width: 100%;
+
+        &__options{
+            width: 100%;
+        }
+
+        img{
+            position: relative;
+            width: 50%;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .quiz-colom-2{
+        grid-template-columns: 1fr;
+    }
+
+    .imageAndOptions img{
+        width: 100%;
+        max-height: 180px;
+        object-fit: cover;
+    }
+
+    .quiz-container__quiz{
+        padding: 30px 20px;
+    }
+}
+
+@media only screen and (max-width: 600px) { 
+    .quiz-container{
+        &__img{
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            height: 50%;
+
+            img{
+                width: 100% !important;
+            }
+        }
+
+        &__info{
+            width: 100%;
+            height: 50%;
+            padding: 0 16px;
+        }
+    }
+
+    .quiz-colom-4{
+        grid-template-columns: 1fr;
+    }
+
+    .quiz-title{
+        margin-bottom: 10px;
+    }
+}
+
+@media only screen and (max-width: 430px) { 
+    .quiz-range__input{
+        width: 100%;
+    }
+}
 </style>

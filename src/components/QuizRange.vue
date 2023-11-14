@@ -1,27 +1,32 @@
 
 
 <script setup>
-// import { reactive, toRefs } from 'vue'
-import VueSlider from 'vue-slider-component'
-import 'vue-slider-component/theme/antd.css'
+const props = defineProps(['settings'])
+</script>
 
-// export default {
-//   setup() {
-//     const data = reactive({ value: 0 })
-//     return toRefs(data)
-//   },
-// }
-
-
-const props = defineProps(['options', 'settings'])
-
+<script>
+    export default {
+        data() {
+            return {
+            inputValue: 0,
+            inputMaxValue: 0,
+            cssInputValue: '0%'
+            };
+        },
+        methods: {
+            sliderChange(evt) {
+            this.inputMaxValue = evt.target.max
+            this.inputValue = evt.target.value
+            this.cssInputValue = this.inputValue / (this.inputMaxValue / 100) + "%"
+            }
+        }
+    }
 </script>
 
 <template>
-    <vue-slider v-model="value" />
     <div class="quiz-range">
-        <label class="quiz-range__label">{{ props.options[0] }}</label>
-        <input v-bind:value="props.settings[0].value" v-bind:min="props.settings[0].minValue" v-bind:max="props.settings[0].maxValue" v-bind:step="props.settings[0].step" class="quiz-range__input" type="range" placeholder="Введите текст">
+        <label class="quiz-range__label">{{ inputValue }}</label>
+        <input v-on:input="sliderChange" value="0" :min="props.settings[0].minValue" :max="props.settings[0].maxValue" :step="props.settings[0].step" class="quiz-range__input" type="range" placeholder="Введите текст">
     </div>
 </template>
 
@@ -30,15 +35,17 @@ const props = defineProps(['options', 'settings'])
 .quiz-range{
     display: flex;
     flex-direction: column;
+    padding: 0 0 30px 0;
 
     &__label{
-        color: #D9D9D9;
+        color: #828282;
         font-size: 16px;
+        margin-bottom: 8px;
     }
 
     
     &__input {
-        background: linear-gradient(to right, #6A6DCD 0%, #6A6DCD 20%, #2F445F 20%, #2F445F 100%);
+        background: linear-gradient(to right, #d13980 0%, #d13980 v-bind(cssInputValue), #f091bd v-bind(cssInputValue), #f091bd 100%);
       /*   border: solid 2px #2F445F; */
         border-radius: 8px;
         height: 8px;
@@ -54,7 +61,38 @@ const props = defineProps(['options', 'settings'])
         border-radius: 50%;
         -webkit-appearance: none;
         cursor: ew-resize;
-        background: #6A6DCD;
+        background: #d13980;
     }
+}
+
+@media only screen and (max-width: 991px) { 
+    .quiz-range{
+        &__input{
+            height: 6px;
+            width: 300px;
+        }
+
+        &__input::-webkit-slider-thumb {
+        width: 15px;
+        height: 15px;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+
+}
+
+@media only screen and (max-width: 600px) { 
+    .quiz-range{
+        &__input{
+            height: 6px;
+            width: 100%;
+        }
+    }
+}
+
+@media only screen and (max-width: 430px) { 
+
 }
 </style>

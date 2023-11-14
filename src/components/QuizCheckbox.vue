@@ -5,22 +5,33 @@ const props = defineProps(['options'])
 </script>
 
 <template>
-  <div v-for="(item, index) in props.options" v-bind:key="item.index">
-    <div class="quiz-button-checkbox">
-        <input class="quiz-button-checkbox__input" name="checkbox" v-bind:id="'checkbox_'+index" type="checkbox">
-        <label class="quiz-button-checkbox__label" v-bind:for="'checkbox_'+index">{{ item }}</label>
+    <div class="QuizCheckbox">
+        <div v-for="(item, index) in props.options" v-bind:key="item.index">
+            <div class="quiz-button-checkbox">
+                <input class="quiz-button-checkbox__input" name="checkbox" v-bind:id="'checkbox_'+index" type="checkbox">
+                <label class="quiz-button-checkbox__label" v-bind:for="'checkbox_'+index">{{ item }}</label>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <style scoped lang="scss">
 
+.QuizCheckbox{
+    display: grid;
+    grid-auto-rows: min-content;
+    grid-gap: 16px;
+    padding-bottom: 6px;
+    max-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 
 .quiz-button-checkbox{
     // margin-bottom: 16px;
     &__label{
         width: 100%;
-        padding: 10px 16px;
+        padding: 10px 40px 10px 16px;
         background: #ffffff;
         color: #000000;
         font-size: 16px;

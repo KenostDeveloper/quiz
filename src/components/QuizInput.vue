@@ -5,16 +5,29 @@ const props = defineProps(['options', 'placeholder'])
 </script>
 
 <template>
-  <div v-for="(item, index) in props.options" v-bind:key="item.index">
-    <div class="quiz-input">
-        <label class="quiz-input__label" v-bind:id="'input_'+index">{{ item.label }}</label>
-        <input class="quiz-input__input" type="text" v-bind:placeholder="item.placeholder">
+  <div class="QuizInput">
+    <div v-for="(item, index) in props.options" v-bind:key="item.index">
+      <div class="quiz-input">
+          <label class="quiz-input__label" v-bind:id="'input_'+index">{{ item.label }}</label>
+          <input class="quiz-input__input" type="text" v-bind:placeholder="item.placeholder">
+      </div>
     </div>
   </div>
+ 
 </template>
 
 <style scoped lang="scss">
 
+.QuizInput{
+    display: grid;
+    // grid-template-columns: 1fr 1fr;
+    grid-auto-rows: min-content;
+    grid-gap: 16px;
+    padding-bottom: 6px;
+    max-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 
 .quiz-input{
     display: flex;

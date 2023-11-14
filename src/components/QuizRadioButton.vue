@@ -5,21 +5,33 @@ const props = defineProps(['options'])
 </script>
 
 <template>
-  <div v-for="(item, index) in props.options" v-bind:key="item.index">
-    <div class="quiz-button-radio">
-        <input class="quiz-button-radio__input" name="radio" v-bind:id="'radio_'+index" type="radio">
-        <label class="quiz-button-radio__label" v-bind:for="'radio_'+index">{{ item }}</label>
+    <div class="QuizRadioButton">
+        <div v-for="(item, index) in props.options" v-bind:key="item.index">
+            <div class="quiz-button-radio">
+                <input class="quiz-button-radio__input" name="radio" v-bind:id="'radio_'+index" type="radio">
+                <label class="quiz-button-radio__label" v-bind:for="'radio_'+index">{{ item }}</label>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <style scoped lang="scss">
+
+.QuizRadioButton{
+    display: grid;
+    grid-auto-rows: min-content;
+    grid-gap: 16px;
+    padding-bottom: 6px;
+    max-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 
 .quiz-button-radio{
     // margin-bottom: 16px;
     &__label{
         width: 100%;
-        padding: 10px 16px;
+        padding: 10px 40px 10px 16px;
         background: #ffffff;
         color: #000000;
         font-size: 16px;
