@@ -12,10 +12,10 @@ import {ref, computed} from 'vue';
 
 const props = defineProps(['question'])
 const questions = props.question
-let progressNumber = 0;
-let progress;
+
 
 const currentQuestion = ref(0);
+const currentQuestionProcent = ref('0%');
 
 const getCurrentQuestion = computed(() => {
 	let question = questions[currentQuestion.value]
@@ -27,8 +27,9 @@ const getCurrentQuestion = computed(() => {
 const NextQuestion = () => {
 	if (currentQuestion.value < questions.length - 1) {
 		currentQuestion.value++
-        progressNumber = currentQuestion.value / (questions.length - 1) * 100;
-        progress = progressNumber + '%';
+        if(currentQuestion.value != 1){
+            currentQuestionProcent.value = (100 / (questions.length - 2) * (currentQuestion.value - 1)) + '%';
+        }
 		return
 	}
 }
@@ -124,9 +125,10 @@ const NextQuestion = () => {
         border-radius: 32px;
 
         &__progress{
-            // width: v-bind(progress);
+            width: v-bind(currentQuestionProcent);
+            transition: all 1s;
             height: 6px;
-            background-color: #ae2f6a;
+            background: linear-gradient(42deg, rgba(174,47,106,1) 0%, rgba(210,132,168,1) 4%, rgba(174,47,106,1) 8%, rgba(210,132,168,1) 12%, rgba(174,47,106,1) 16%, rgba(210,132,168,1) 20%, rgba(174,47,106,1) 24%, rgba(210,132,168,1) 28%, rgba(174,47,106,1) 32%, rgba(210,132,168,1) 36%, rgba(174,47,106,1) 40%, rgba(210,132,168,1) 44%, rgba(174,47,106,1) 48%, rgba(210,132,168,1) 52%, rgba(174,47,106,1) 56%, rgba(210,132,168,1) 60%, rgba(174,47,106,1) 64%, rgba(210,132,168,1) 68%, rgba(174,47,106,1) 72%, rgba(210,132,168,1) 76%, rgba(174,47,106,1) 80%, rgba(210,132,168,1) 84%, rgba(174,47,106,1) 88%, rgba(210,132,168,1) 92%, rgba(174,47,106,1) 96%, rgba(210,132,168,1) 100%);
             position: relative;
             left: 3px;
             border-radius: 5px;
