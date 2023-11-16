@@ -1,29 +1,63 @@
 
-
-<script setup>
-    const props = defineProps(['options', 'settings', 'title'])
-</script>
-
-
 <template>
     <div class="QuizFormFields">
         
         <form class="QuizFormFields__form" action="">
-            <div class="quiz-input" v-for="(item, index) in props.options" v-bind:key="item.index">
+            <div class="quiz-input" v-for="(item, index) in options" v-bind:key="index">
                 <label class="quiz-input__label" v-bind:id="'input_'+index">{{ item.label }}</label>
-                <input class="quiz-input__input" type="text" v-bind:placeholder="item.placeholder">
+                <input v-model="data[item.id]" v-on:change="actionElem" class="quiz-input__input" type="text" v-bind:placeholder="item.placeholder">
             </div>
 
-            <div class="then-button">{{ props.settings[0].buttonText }}</div>
+            <div class="then-button">{{ settings[0].buttonText }}</div>
         </form>
 
         <div class="QuizFormFields__info">
-            <h2 class="QuizFormFields__header">{{ props.title }}</h2>
-            <p class="QuizFormFields__text">{{ props.settings[0].text }}</p>
+            <h2 class="QuizFormFields__header">{{ title }}</h2>
+            <p class="QuizFormFields__text">{{ settings[0].text }}</p>
         </div>
     </div>
     
 </template>
+
+
+<script>
+    export default {
+        name: 'QuizFormFields',
+        emits: ['addElem'],
+        props: {
+            options: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            },
+            settings: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            },
+            title: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            }
+        },
+        data() {
+            return{
+                data: []
+            }
+        },
+        methods: {
+            actionElem () {
+                this.$emit('addElem', this.data)
+            }
+        }
+    }
+</script>
+
+
 
 <style scoped lang="scss">
 

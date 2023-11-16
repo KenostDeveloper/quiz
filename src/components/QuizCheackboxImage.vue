@@ -1,16 +1,8 @@
-
-
-<script setup>
-const props = defineProps(['options'])
-
-</script>
-
-
 <template>
     <div class="QuizCheackboxImage">
-        <div class="QuizCheackboxImage__item" v-for="(item, index) in props.options" v-bind:key="item.index">
-            <div class="quiz-image-checkbox">
-                <input class="quiz-image-checkbox__input" name="cheackbox_image" type="checkbox" v-bind:id="index+'_image-cheackbox'">
+        <div class="QuizCheackboxImage__item" v-for="(item, index) in options" v-bind:key="index">
+            <div @click="select" class="quiz-image-checkbox">
+                <input v-model="data[item.id]" v-on:change="actionElem" class="quiz-image-checkbox__input" name="cheackbox_image" type="checkbox" v-bind:id="index+'_image-cheackbox'">
                 <label class="quiz-image-checkbox__label" v-bind:for="index+'_image-cheackbox'">
                     <img class="quiz-image-checkbox__image" v-bind:src="item.imgPath" alt="">
                     <p v-if="item.text != ''" class="quiz-image-checkbox__text">{{ item.text }}</p>
@@ -18,8 +10,33 @@ const props = defineProps(['options'])
             </div>
         </div>
     </div>
-    
 </template>
+
+<script>
+    export default {
+        name: 'QuizCheckboxImage',
+        emits: ['addElem'],
+        props: {
+            options: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            }
+        },
+        data() {
+            return{
+                data: []
+            }
+        },
+        methods: {
+            actionElem () {
+                this.$emit('addElem', this.data)
+            }
+        }
+    }
+</script>
+
 
 <style scoped lang="scss">
 

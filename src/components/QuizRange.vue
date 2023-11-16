@@ -1,34 +1,42 @@
-
-
-<script setup>
-const props = defineProps(['settings'])
-</script>
+<template>
+    <div class="quiz-range">
+        <label class="quiz-range__label">{{ inputValue }}</label>
+        <input v-model="data.valueRange" v-on:change="actionElem" v-on:input="sliderChange" :min="settings[0].minValue" :max="settings[0].maxValue" :step="settings[0].step" class="quiz-range__input" type="range" placeholder="Введите текст">
+    </div>
+</template>
 
 <script>
     export default {
+        name: 'QuizRange',
+        emits: ['addElem'],
+        props: {
+            settings: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            }
+        },
         data() {
-            return {
-            inputValue: 0,
-            inputMaxValue: 0,
-            cssInputValue: '0%'
-            };
+            return{
+                data: {valueRange: ''},
+                inputValue: '0',
+                inputMaxValue: 0,
+                cssInputValue: '50%'
+            }
         },
         methods: {
+            actionElem () {
+                this.$emit('addElem', this.data)
+            },
             sliderChange(evt) {
-            this.inputMaxValue = evt.target.max
-            this.inputValue = evt.target.value
-            this.cssInputValue = this.inputValue / (this.inputMaxValue / 100) + "%"
+                this.inputMaxValue = evt.target.max
+                this.inputValue = evt.target.value
+                this.cssInputValue = this.inputValue / (this.inputMaxValue / 100) + "%"
             }
         }
     }
 </script>
-
-<template>
-    <div class="quiz-range">
-        <label class="quiz-range__label">{{ inputValue }}</label>
-        <input v-on:input="sliderChange" value="0" :min="props.settings[0].minValue" :max="props.settings[0].maxValue" :step="props.settings[0].step" class="quiz-range__input" type="range" placeholder="Введите текст">
-    </div>
-</template>
 
 <style scoped lang="scss">
 

@@ -1,20 +1,38 @@
-<script setup>
-
-const props = defineProps(['options', 'placeholder'])
-
-</script>
-
 <template>
   <div class="QuizInput">
-    <div v-for="(item, index) in props.options" v-bind:key="item.index">
+    <div v-for="(item, index) in options" v-bind:key="item.index">
       <div class="quiz-input">
-          <label class="quiz-input__label" v-bind:id="'input_'+index">{{ item.label }}</label>
-          <input class="quiz-input__input" type="text" v-bind:placeholder="item.placeholder">
+          <label  class="quiz-input__label" v-bind:id="'input_'+index">{{ item.label }}</label>
+          <input v-model="data[item.id]" v-on:change="actionElem" class="quiz-input__input" type="text" v-bind:placeholder="item.placeholder">
       </div>
     </div>
   </div>
- 
 </template>
+
+<script>
+  export default {
+        name: 'QuizInput',
+        emits: ['addElem'],
+        props: {
+            options: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            }
+        },
+        data() {
+            return{
+                data: []
+            }
+        },
+        methods: {
+            actionElem () {
+                this.$emit('addElem', this.data)
+            }
+        }
+    }
+</script>
 
 <style scoped lang="scss">
 

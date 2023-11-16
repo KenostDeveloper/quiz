@@ -1,3 +1,58 @@
+
+<template>
+    <div class="quiz-container">
+        <div class="quiz-container__quiz-start" v-if="getCurrentQuestion.type == 0" :options=getCurrentQuestion.options>
+            <div class="quiz-container__img">
+                <img v-bind:src="getCurrentQuestion.imgPath" alt="">
+            </div>
+            <div class="quiz-container__info">
+                <h1 class="quiz-container__header">{{ getCurrentQuestion.question }}</h1>
+                <p class="quiz-container__desc">{{ getCurrentQuestion.description }}</p>
+                <div class="quiz-container__button" @click="NextQuestion">{{ getCurrentQuestion.buttonText }}</div>
+            </div>
+            
+        </div>
+        <div v-if="getCurrentQuestion.type > 0" class="quiz-container__quiz">
+            <QuizTitle v-if="currentQuestion <= questions.length - 2" :title=getCurrentQuestion.question></QuizTitle>
+            <div class="quiz-container__content">
+                <QuizRadioButton @addElem="addElem" class="quiz-colom-2" v-if="getCurrentQuestion.type == 1" :options=getCurrentQuestion.options></QuizRadioButton>
+                <QuizCheckbox @addElem="addElem" class="quiz-colom-2" v-if="getCurrentQuestion.type == 2" :options=getCurrentQuestion.options></QuizCheckbox>
+                <QuizInput @addElem="addElem" class="quiz-colom-2" v-if="getCurrentQuestion.type == 3" :options=getCurrentQuestion.options ></QuizInput>
+                <QuizRange @addElem="addElem" v-if="getCurrentQuestion.type == 4" :settings=getCurrentQuestion.settings></QuizRange>
+                <QuizCheackboxImage @addElem="addElem" class="quiz-colom-4" v-if="getCurrentQuestion.type == 5" :options="getCurrentQuestion.options"></QuizCheackboxImage>
+                <QuizRadioButtonImage @addElem="addElem" class="quiz-colom-4" v-if="getCurrentQuestion.type == 6" :options="getCurrentQuestion.options"></QuizRadioButtonImage>
+                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 7">
+                    <QuizRadioButton @addElem="addElem" class="imageAndOptions__options quiz-colom-2" :options=getCurrentQuestion.options></QuizRadioButton>
+                    <img :src="getCurrentQuestion.imgPath" alt="">
+                </div>
+                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 8">
+                    <QuizCheckbox @addElem="addElem" class="imageAndOptions__options quiz-colom-2" :options=getCurrentQuestion.options></QuizCheckbox>
+                    <img :src="getCurrentQuestion.imgPath" alt="">
+                </div>
+                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 9">
+                    <QuizInput @addElem="addElem" class="imageAndOptions__options quiz-colom-2" :options=getCurrentQuestion.options></QuizInput>
+                    <img :src="getCurrentQuestion.imgPath" alt="">
+                </div>
+                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 10">
+                    <QuizRange @addElem="addElem" class="imageAndOptions__options" :settings=getCurrentQuestion.settings></QuizRange>
+                    <img :src="getCurrentQuestion.imgPath" alt="">
+                </div>
+                <QuizTextAndImage v-if="getCurrentQuestion.type == 11" :imgPath=getCurrentQuestion.imgPath :text=getCurrentQuestion.text></QuizTextAndImage>
+                <QuizFormFields @addElem="addElem" v-if="getCurrentQuestion.type == 12" :title=getCurrentQuestion.question :options=getCurrentQuestion.options :settings="getCurrentQuestion.settings"></QuizFormFields>
+            </div>
+            <div class="quiz-container-bottom-menu" v-if="currentQuestion <= questions.length - 2">
+                <div class="quiz-container__step-count">
+                    <span>{{currentQuestion}}</span>/ {{questions.length - 2}}
+                    <div class="quiz-container__progress-bar"><div class="quiz-container__progress"></div></div>
+                </div>
+                <button @click="NextQuestion" class="then-button">Далее</button>
+            </div>
+        </div>
+        
+    </div>
+    
+</template>
+
 <script setup>
 import QuizTitle from './QuizTitle.vue';
 import QuizRadioButton from './QuizRadioButton.vue';
@@ -36,60 +91,11 @@ const NextQuestion = () => {
 
 </script>
 
-
-<template>
-    <div class="quiz-container">
-        <div class="quiz-container__quiz-start" v-if="getCurrentQuestion.type == 0" :options=getCurrentQuestion.options>
-            <div class="quiz-container__img">
-                <img v-bind:src="getCurrentQuestion.imgPath" alt="">
-            </div>
-            <div class="quiz-container__info">
-                <h1 class="quiz-container__header">{{ getCurrentQuestion.question }}</h1>
-                <p class="quiz-container__desc">{{ getCurrentQuestion.description }}</p>
-                <div class="quiz-container__button" @click="NextQuestion">{{ getCurrentQuestion.buttonText }}</div>
-            </div>
-            
-        </div>
-        <div v-if="getCurrentQuestion.type > 0" class="quiz-container__quiz">
-            <QuizTitle v-if="currentQuestion <= questions.length - 2" :title=getCurrentQuestion.question></QuizTitle>
-            <div class="quiz-container__content">
-                <QuizRadioButton class="quiz-colom-2" v-if="getCurrentQuestion.type == 1" :options=getCurrentQuestion.options></QuizRadioButton>
-                <QuizCheckbox class="quiz-colom-2" v-if="getCurrentQuestion.type == 2" :options=getCurrentQuestion.options></QuizCheckbox>
-                <QuizInput class="quiz-colom-2" v-if="getCurrentQuestion.type == 3" :options=getCurrentQuestion.options ></QuizInput>
-                <QuizRange v-if="getCurrentQuestion.type == 4" :settings=getCurrentQuestion.settings></QuizRange>
-                <QuizCheackboxImage class="quiz-colom-4" v-if="getCurrentQuestion.type == 5" :options="getCurrentQuestion.options"></QuizCheackboxImage>
-                <QuizRadioButtonImage class="quiz-colom-4" v-if="getCurrentQuestion.type == 6" :options="getCurrentQuestion.options"></QuizRadioButtonImage>
-                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 7">
-                    <QuizRadioButton class="imageAndOptions__options quiz-colom-2" :options=getCurrentQuestion.options></QuizRadioButton>
-                    <img :src="getCurrentQuestion.imgPath" alt="">
-                </div>
-                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 8">
-                    <QuizCheckbox class="imageAndOptions__options quiz-colom-2" :options=getCurrentQuestion.options></QuizCheckbox>
-                    <img :src="getCurrentQuestion.imgPath" alt="">
-                </div>
-                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 9">
-                    <QuizInput class="imageAndOptions__options quiz-colom-2" :options=getCurrentQuestion.options></QuizInput>
-                    <img :src="getCurrentQuestion.imgPath" alt="">
-                </div>
-                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 10">
-                    <QuizRange class="imageAndOptions__options" :settings=getCurrentQuestion.settings></QuizRange>
-                    <img :src="getCurrentQuestion.imgPath" alt="">
-                </div>
-                <QuizTextAndImage v-if="getCurrentQuestion.type == 11" :imgPath=getCurrentQuestion.imgPath :text=getCurrentQuestion.text></QuizTextAndImage>
-                <QuizFormFields v-if="getCurrentQuestion.type == 12" :title=getCurrentQuestion.question :options=getCurrentQuestion.options :settings="getCurrentQuestion.settings"></QuizFormFields>
-            </div>
-            <div class="quiz-container-bottom-menu" v-if="currentQuestion <= questions.length - 2">
-                <div class="quiz-container__step-count">
-                    <span>{{currentQuestion}}</span>/ {{questions.length - 2}}
-                    <div class="quiz-container__progress-bar"><div class="quiz-container__progress"></div></div>
-                </div>
-                <div @click="NextQuestion" class="then-button">Далее</div>
-            </div>
-        </div>
-        
-    </div>
-    
-</template>
+<script>
+    function addElem(data){
+        console.log(data)
+    }
+</script>
 
 <style scoped lang="scss">
 
@@ -256,6 +262,7 @@ const NextQuestion = () => {
         border-radius: 24px;
         cursor: pointer;
         transition: all 0.3s;
+        border: none;
         &:hover{
             background: #ae2f6a;
         }

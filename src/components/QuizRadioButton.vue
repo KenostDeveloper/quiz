@@ -1,19 +1,41 @@
-<script setup>
-
-const props = defineProps(['options'])
-
-</script>
 
 <template>
     <div class="QuizRadioButton">
-        <div v-for="(item, index) in props.options" v-bind:key="item.index">
+        <div v-for="(item, index) in options" v-bind:key="index">
             <div class="quiz-button-radio">
-                <input class="quiz-button-radio__input" name="radio" v-bind:id="'radio_'+index" type="radio">
-                <label class="quiz-button-radio__label" v-bind:for="'radio_'+index">{{ item }}</label>
+                <input :value="item.id" v-model="data.value" v-on:change="actionElem" class="quiz-button-radio__input" name="radio" v-bind:id="'radio_'+index" type="radio">
+                <label class="quiz-button-radio__label" v-bind:for="'radio_'+index">{{ item.text }}</label>
             </div>
         </div>
     </div>
 </template>
+
+
+<script>
+    export default {
+        name: 'QuizRadioButton',
+        emits: ['addElem'],
+        props: {
+            options: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            }
+        },
+        data() {
+            return{
+                data: []
+            }
+        },
+        methods: {
+            actionElem () {
+                this.$emit('addElem', this.data)
+            }
+        }
+    }
+</script>
+
 
 <style scoped lang="scss">
 

@@ -1,19 +1,38 @@
-<script setup>
-
-const props = defineProps(['options'])
-
-</script>
-
 <template>
     <div class="QuizCheckbox">
-        <div v-for="(item, index) in props.options" v-bind:key="item.index">
+        <div v-for="(item, index) in options" v-bind:key="index">
             <div class="quiz-button-checkbox">
-                <input class="quiz-button-checkbox__input" name="checkbox" v-bind:id="'checkbox_'+index" type="checkbox">
-                <label class="quiz-button-checkbox__label" v-bind:for="'checkbox_'+index">{{ item }}</label>
+                <input v-model="data[item.id]" v-on:change="actionElem" class="quiz-button-checkbox__input" name="checkbox" v-bind:id="'checkbox_'+index" type="checkbox">
+                <label class="quiz-button-checkbox__label" v-bind:for="'checkbox_'+index">{{ item.text }}</label>
             </div>
         </div>
     </div>
 </template>
+
+<script>
+    export default {
+        name: 'QuizCheckbox',
+        emits: ['addElem'],
+        props: {
+            options: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            }
+        },
+        data() {
+            return{
+                data: []
+            }
+        },
+        methods: {
+            actionElem () {
+                this.$emit('addElem', this.data)
+            }
+        }
+    }
+</script>
 
 <style scoped lang="scss">
 
