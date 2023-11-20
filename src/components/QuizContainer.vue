@@ -13,7 +13,7 @@
             
         </div>
         <div v-if="getCurrentQuestion.type > 0" class="quiz-container__quiz">
-            <QuizTitle v-if="currentQuestion <= questions.length - 2" :title=getCurrentQuestion.question></QuizTitle>
+            <QuizTitle v-if="currentQuestion <= question.length - 2" :title=getCurrentQuestion.question></QuizTitle>
             <div class="quiz-container__content">
                 <QuizRadioButton @addElem="addElem" class="quiz-colom-2" v-if="getCurrentQuestion.type == 1" :options=getCurrentQuestion.options></QuizRadioButton>
                 <QuizCheckbox @addElem="addElem" class="quiz-colom-2" v-if="getCurrentQuestion.type == 2" :options=getCurrentQuestion.options></QuizCheckbox>
@@ -40,12 +40,12 @@
                 <QuizTextAndImage v-if="getCurrentQuestion.type == 11" :imgPath=getCurrentQuestion.imgPath :text=getCurrentQuestion.text></QuizTextAndImage>
                 <QuizFormFields @addElem="addElem" v-if="getCurrentQuestion.type == 12" :title=getCurrentQuestion.question :options=getCurrentQuestion.options :settings="getCurrentQuestion.settings"></QuizFormFields>
             </div>
-            <div class="quiz-container-bottom-menu" v-if="currentQuestion <= questions.length - 2">
+            <div class="quiz-container-bottom-menu" v-if="currentQuestion <= question.length - 2">
                 <div class="quiz-container__step-count">
-                    <span>{{currentQuestion}}</span>/ {{questions.length - 2}}
+                    <span>{{currentQuestion}}</span>/ {{question.length - 2}}
                     <div class="quiz-container__progress-bar"><div class="quiz-container__progress"></div></div>
                 </div>
-                <button @click="NextQuestion" class="then-button">Далее</button>
+                <button @click="NextQuestion" :disabled="buttonDisabled"  class="then-button">Далее</button>
             </div>
         </div>
         
@@ -54,46 +54,69 @@
 </template>
 
 <script setup>
-import QuizTitle from './QuizTitle.vue';
-import QuizRadioButton from './QuizRadioButton.vue';
-import QuizCheckbox from './QuizCheckbox.vue';
-import QuizInput from './QuizInput.vue';
-import QuizRange from './QuizRange.vue';
-import QuizCheackboxImage from './QuizCheackboxImage.vue'
-import QuizRadioButtonImage from './QuizRadioButtonImage.vue'
-import QuizTextAndImage from './QuizTextAndImage.vue'
-import QuizFormFields from './QuizFormFields.vue'
-import {ref, computed} from 'vue';
-
-const props = defineProps(['question'])
-const questions = props.question
-
-
-const currentQuestion = ref(0);
-const currentQuestionProcent = ref('0%');
-
-const getCurrentQuestion = computed(() => {
-	let question = questions[currentQuestion.value]
-	question.index = currentQuestion.value
-	return question
-})
-
-//Следующий шаг
-const NextQuestion = () => {
-	if (currentQuestion.value < questions.length - 1) {
-		currentQuestion.value++
-        if(currentQuestion.value != 1){
-            currentQuestionProcent.value = (100 / (questions.length - 2) * (currentQuestion.value - 1)) + '%';
-        }
-		return
-	}
-}
-
+    import QuizTitle from './QuizTitle.vue';
+    import QuizRadioButton from './QuizRadioButton.vue';
+    import QuizCheckbox from './QuizCheckbox.vue';
+    import QuizInput from './QuizInput.vue';
+    import QuizRange from './QuizRange.vue';
+    import QuizCheackboxImage from './QuizCheackboxImage.vue'
+    import QuizRadioButtonImage from './QuizRadioButtonImage.vue'
+    import QuizTextAndImage from './QuizTextAndImage.vue'
+    import QuizFormFields from './QuizFormFields.vue'
 </script>
 
 <script>
-    function addElem(data){
-        console.log(data)
+
+    export default {
+        data() {
+            return {
+                buttonDisabled: true,
+                valueObj: '',
+                result: [],
+                currentQuestion: 0,
+                currentQuestionProcent: '0%'
+            }
+        },
+        props: {
+            question: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            }
+        },
+        methods: {
+            addElem(data){
+                this.valueObj = data
+                // console.dir(this.result)
+                // console.log(Object.values(data).filter(item => item).length === 1);
+                this.buttonDisabled = false;
+            },
+
+            NextQuestion() {
+                if (this.currentQuestion < this.question.length - 1) {
+                    this.currentQuestion++
+                    if(this.currentQuestion != 1){
+                        this.currentQuestionProcent = (100 / (this.question.length - 2) * (this.currentQuestion - 1)) + '%';
+                        this.result[this.currentQuestion - 2] = this.valueObj;
+                        
+                        if(this.question[this.currentQuestion].type != 11){
+                            this.buttonDisabled = true;
+                        }else{
+                            this.buttonDisabled = false;
+                        }
+                    }
+                    return
+                }
+            }
+        },
+        computed: {
+            getCurrentQuestion(){
+                let question = this.question[this.currentQuestion]
+                question.index = this.currentQuestion
+                return question
+            }
+        }
     }
 </script>
 
@@ -265,6 +288,10 @@ const NextQuestion = () => {
         border: none;
         &:hover{
             background: #ae2f6a;
+        }
+        &:disabled{
+            background: #c67199;
+            cursor: unset;
         }
     }
 
