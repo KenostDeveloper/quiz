@@ -3,7 +3,7 @@
     <main class="dart_main dart-center">
       <section class="dart-section">
         <div class="dart_container">
-          <QuizContainer class="quiz-container__full" :question="questions"></QuizContainer>
+          <QuizContainer class="quiz-container__full" :question="quiz"></QuizContainer>
         </div>
         
       </section>
@@ -13,7 +13,7 @@
 
 <script setup>
 import QuizContainer from './components/QuizContainer.vue';
-import {ref} from 'vue';
+// import {ref} from 'vue';
 
 // const questions = ref([
 //   {
@@ -154,87 +154,101 @@ import {ref} from 'vue';
 //   },
 // ])
 
-const questions = ref([
-{
-    type: 0,
-    question: "Калькулятор расчёта стоимости тонировки автомобиля",
-    description: "После прохождения теста ты получишь индивидуальное предложение и скидку 💯!",
-    buttonText: "Расчитать",
-    imgPath: "https://hgwipn3sa-res.cloudinary.com/image/upload/w_auto,f_auto,q_auto,g_auto,c_fill,h_650,dpr_1/xfcjr3mawgqsno9qesb6.jpg"
-  },  
-  {
-    type: 5,
-    question: "Выберите класс вашего автомобиля:",
-    options: [
-      {id: 0, text: 'Малый класс', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/d0056xfneaiojmtbazr1.png'},
-      {id: 1, text: 'Средний класс', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/irlvp1lzvryloeqvblhs.png'},
-      {id: 2, text: 'Бизнес класс', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/jdpeovf4eehroprjdvoi.png'},
-      {id: 3, text: 'Кроссовер', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/jm6u6tbjwqd3vixeuita.png'},
-      {id: 4, text: 'Внедорожник', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/y4xc5k02zyarbcwa6oa1.png'},
-      {id: 5, text: 'Премиум класс', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/pmoh057i6pucn0yepxkd.png'},
-      {id: 6, text: 'Минивэн', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/lhlhsutd8zomlhc6lzzc.png'},
+// const questions = ref([
+// {
+//     type: 0,
+//     question: "Калькулятор расчёта стоимости тонировки автомобиля",
+//     description: "После прохождения теста ты получишь индивидуальное предложение и скидку 💯!",
+//     buttonText: "Расчитать",
+//     imgPath: "https://hgwipn3sa-res.cloudinary.com/image/upload/w_auto,f_auto,q_auto,g_auto,c_fill,h_650,dpr_1/xfcjr3mawgqsno9qesb6.jpg"
+//   },  
+//   {
+//     type: 5,
+//     question: "Выберите класс вашего автомобиля:",
+//     options: [
+//       {id: 0, text: 'Малый класс', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/d0056xfneaiojmtbazr1.png'},
+//       {id: 1, text: 'Средний класс', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/irlvp1lzvryloeqvblhs.png'},
+//       {id: 2, text: 'Бизнес класс', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/jdpeovf4eehroprjdvoi.png'},
+//       {id: 3, text: 'Кроссовер', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/jm6u6tbjwqd3vixeuita.png'},
+//       {id: 4, text: 'Внедорожник', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/y4xc5k02zyarbcwa6oa1.png'},
+//       {id: 5, text: 'Премиум класс', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/pmoh057i6pucn0yepxkd.png'},
+//       {id: 6, text: 'Минивэн', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/lhlhsutd8zomlhc6lzzc.png'},
 
-    ],
-  },
-  {
-    type: 6,
-    question: "Выберите стёкла:",
-    options: [
-      {id: 0, text: 'Лобовое стекло', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_420,f_auto,q_auto,g_auto,c_fill,h_420,dpr_1/euoo19kune6h4l7cgxto.png'},
-      {id: 1, text: 'Боковые стёкла', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_420,f_auto,q_auto,g_auto,c_fill,h_420,dpr_1/xed00dr0ojbh5tfqblhi.png'},
-      {id: 2, text: 'Задние стёкла', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_420,f_auto,q_auto,g_auto,c_fill,h_420,dpr_1/pycvqjcgi9ehtseljpl7.png'},
+//     ],
+//   },
+//   {
+//     type: 6,
+//     question: "Выберите стёкла:",
+//     options: [
+//       {id: 0, text: 'Лобовое стекло', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_420,f_auto,q_auto,g_auto,c_fill,h_420,dpr_1/euoo19kune6h4l7cgxto.png'},
+//       {id: 1, text: 'Боковые стёкла', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_420,f_auto,q_auto,g_auto,c_fill,h_420,dpr_1/xed00dr0ojbh5tfqblhi.png'},
+//       {id: 2, text: 'Задние стёкла', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_420,f_auto,q_auto,g_auto,c_fill,h_420,dpr_1/pycvqjcgi9ehtseljpl7.png'},
 
-    ],
-  },
-  {
-    type: 5,
-    question: "Выберите производителя плёнки:",
-    options: [
-      {id: 0, text: 'SunControl', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/v9qnvoq9g9rdw40vaulx.png'},
-      {id: 1, text: 'SunTek', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/bdpamevzugpghfyoyili.png'},
-      {id: 2, text: 'Lumar', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/bar3wry6w6q3g73k9g6j.png'},
-      {id: 3, text: 'UltraVision', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/bubf48nrd3ksl0323n5q.png'},
-      {id: 4, text: 'Не знаю', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/tbuulwco0doprlwqumbo.png'},
-    ],
-  },
-  {
-    type: 7,
-    question: "Выберите процент тонировки:",
-    imgPath: "https://hgwipn3sa-res.cloudinary.com/image/upload/w_380,f_auto,q_auto,g_auto,c_fill,h_307,dpr_1/laxao0bwhmnzdkc9nmvm.jpg",
-    options: [
-      {id: 1, text: '5%'},
-      {id: 2, text: '15%'},
-      {id: 3, text: '30%'},
-      {id: 4, text: '40%'},
-      {id: 5, text: '40%'},
-      {id: 6, text: '70%'},
-      {id: 7, text: 'Не знаю, что выбрать  🤷‍♂️'},
-    ],
-  },
-  {
-    type: 6,
-    question: "Выберите дополнительные услуги:",
-    options: [
-      {id: 0, text: 'Снятие старой тонировки', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_420,f_auto,q_auto,g_auto,c_fill,h_420,dpr_1/afa0kpxlqidznq5rsyx8.png'},
-      {id: 1, text: 'Полировка передних фар', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_420,f_auto,q_auto,g_auto,c_fill,h_420,dpr_1/s6clkbov0t0lbhzsq3j8.png'},
-      {id: 2, text: 'Бронирование передних фар полиуретановой плёнкой', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_420,f_auto,q_auto,g_auto,c_fill,h_420,dpr_1/r325y1mcqjldq1uoih43.png'},
-      {id: 3, text: 'Затемнение задних фонарей полиуретановой пленкой', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_420,f_auto,q_auto,g_auto,c_fill,h_420,dpr_1/igts3ksievrxbrvrdglu.png'},
-    ],
-  },
-  {
-    type: 12,
-    question: "Оставьте свои контакты, чтобы получить подарок",
-    settings: [
-      {text: "Наш менеджер свяжется с вами, подберёт удобное время и запишет вас на тонировку автомобиля.", buttonText: "Получить результаты"}
-    ],
-    options: [
-      {id: 1, label: 'Имя', placeholder: 'Иван'},
-      {id: 2, label: 'Номер телефона', placeholder: '+7 999 999 99 99'},
-      {id: 3, label: 'email', placeholder: 'email@mail.ru'},
-    ],
-  },
-])
+//     ],
+//   },
+//   {
+//     type: 5,
+//     question: "Выберите производителя плёнки:",
+//     options: [
+//       {id: 0, text: 'SunControl', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/v9qnvoq9g9rdw40vaulx.png'},
+//       {id: 1, text: 'SunTek', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/bdpamevzugpghfyoyili.png'},
+//       {id: 2, text: 'Lumar', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/bar3wry6w6q3g73k9g6j.png'},
+//       {id: 3, text: 'UltraVision', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/bubf48nrd3ksl0323n5q.png'},
+//       {id: 4, text: 'Не знаю', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_480,f_auto,q_auto,g_auto,c_fill,h_303,dpr_1/tbuulwco0doprlwqumbo.png'},
+//     ],
+//   },
+//   {
+//     type: 7,
+//     question: "Выберите процент тонировки:",
+//     imgPath: "https://hgwipn3sa-res.cloudinary.com/image/upload/w_380,f_auto,q_auto,g_auto,c_fill,h_307,dpr_1/laxao0bwhmnzdkc9nmvm.jpg",
+//     options: [
+//       {id: 1, text: '5%'},
+//       {id: 2, text: '15%'},
+//       {id: 3, text: '30%'},
+//       {id: 4, text: '40%'},
+//       {id: 5, text: '40%'},
+//       {id: 6, text: '70%'},
+//       {id: 7, text: 'Не знаю, что выбрать  🤷‍♂️'},
+//     ],
+//   },
+//   {
+//     type: 6,
+//     question: "Выберите дополнительные услуги:",
+//     options: [
+//       {id: 0, text: 'Снятие старой тонировки', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_420,f_auto,q_auto,g_auto,c_fill,h_420,dpr_1/afa0kpxlqidznq5rsyx8.png'},
+//       {id: 1, text: 'Полировка передних фар', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_420,f_auto,q_auto,g_auto,c_fill,h_420,dpr_1/s6clkbov0t0lbhzsq3j8.png'},
+//       {id: 2, text: 'Бронирование передних фар полиуретановой плёнкой', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_420,f_auto,q_auto,g_auto,c_fill,h_420,dpr_1/r325y1mcqjldq1uoih43.png'},
+//       {id: 3, text: 'Затемнение задних фонарей полиуретановой пленкой', imgPath: 'https://hgwipn3sa-res.cloudinary.com/image/upload/w_420,f_auto,q_auto,g_auto,c_fill,h_420,dpr_1/igts3ksievrxbrvrdglu.png'},
+//     ],
+//   },
+//   {
+//     type: 12,
+//     question: "Оставьте свои контакты, чтобы получить подарок",
+//     settings: [
+//       {text: "Наш менеджер свяжется с вами, подберёт удобное время и запишет вас на тонировку автомобиля.", buttonText: "Получить результаты"}
+//     ],
+//     options: [
+//       {id: 1, label: 'Имя', placeholder: 'Иван'},
+//       {id: 2, label: 'Номер телефона', placeholder: '+7 999 999 99 99'},
+//       {id: 3, label: 'email', placeholder: 'email@mail.ru'},
+//     ],
+//   },
+// ])
 
+</script>
+
+<script>
+  export default {
+    name: 'DartQuiz',
+    props: {
+        quiz: {
+            type: Object,
+            default: () => {
+              return {}
+            }
+        }
+    }
+  }
 </script>
 
 <style scoped lang="scss">
@@ -251,6 +265,7 @@ const questions = ref([
       height: 80vh;
     }
   }
+
   
   @media only screen and (max-width: 1200px) { 
 

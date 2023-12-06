@@ -1,52 +1,55 @@
 
 <template>
     <div class="quiz-container">
-        <div class="quiz-container__quiz-start" v-if="getCurrentQuestion.type == 0" :options=getCurrentQuestion.options>
+        <div class="quiz-container__quiz-start" v-if="getCurrentQuestion.index == -1" :options=getCurrentQuestion.options>
             <div class="quiz-container__img">
-                <img v-bind:src="getCurrentQuestion.imgPath" alt="">
+                <img v-bind:src="getCurrentQuestion.image" v-bind:alt="getCurrentQuestion.name">
             </div>
             <div class="quiz-container__info">
-                <h1 class="quiz-container__header">{{ getCurrentQuestion.question }}</h1>
+                <h1 class="quiz-container__header">{{ getCurrentQuestion.name }}</h1>
                 <p class="quiz-container__desc">{{ getCurrentQuestion.description }}</p>
-                <div class="quiz-container__button" @click="NextQuestion">{{ getCurrentQuestion.buttonText }}</div>
+                <div class="quiz-container__button" @click="NextQuestion">{{ getCurrentQuestion.btn_start }}</div>
             </div>
-            
         </div>
-        <div v-if="getCurrentQuestion.type > 0" class="quiz-container__quiz">
-            <QuizTitle v-if="currentQuestion <= question.length - 2" :title=getCurrentQuestion.question></QuizTitle>
+
+        <div v-if="getCurrentQuestion.index > -1" class="quiz-container__quiz">
+            <QuizTitle v-if="currentQuestion <= question[0].steps.length - 1" :title=getCurrentQuestion.name></QuizTitle>
+            <!-- {{ getCurrentQuestion.fields }} -->
             <div class="quiz-container__content">
-                <QuizRadioButton @addElem="addElem" class="quiz-colom-2" v-if="getCurrentQuestion.type == 1" :options=getCurrentQuestion.options></QuizRadioButton>
-                <QuizCheckbox @addElem="addElem" class="quiz-colom-2" v-if="getCurrentQuestion.type == 2" :options=getCurrentQuestion.options></QuizCheckbox>
-                <QuizInput @addElem="addElem" class="quiz-colom-2" v-if="getCurrentQuestion.type == 3" :options=getCurrentQuestion.options ></QuizInput>
-                <QuizRange @addElem="addElem" v-if="getCurrentQuestion.type == 4" :settings=getCurrentQuestion.settings></QuizRange>
-                <QuizCheackboxImage @addElem="addElem" class="quiz-colom-4" v-if="getCurrentQuestion.type == 5" :options="getCurrentQuestion.options"></QuizCheackboxImage>
-                <QuizRadioButtonImage @addElem="addElem" class="quiz-colom-4" v-if="getCurrentQuestion.type == 6" :options="getCurrentQuestion.options"></QuizRadioButtonImage>
+                <QuizRadioButton @addElem="addElem" class="quiz-colom-2" v-if="getCurrentQuestion.typeStep == 1" :options=getCurrentQuestion.fields></QuizRadioButton>
+                <QuizCheckbox @addElem="addElem" class="quiz-colom-2" v-if="getCurrentQuestion.typeStep == 2" :options=getCurrentQuestion.options></QuizCheckbox>
+                <QuizInput @addElem="addElem" class="quiz-colom-2" v-if="getCurrentQuestion.typeStep == 3" :options=getCurrentQuestion.options ></QuizInput>
+                <QuizRange @addElem="addElem" v-if="getCurrentQuestion.typeStep == 4" :settings=getCurrentQuestion.settings></QuizRange>
+                <QuizCheackboxImage @addElem="addElem" class="quiz-colom-4" v-if="getCurrentQuestion.typeStep == 5" :options="getCurrentQuestion.options"></QuizCheackboxImage>
+                <QuizRadioButtonImage @addElem="addElem" class="quiz-colom-4" v-if="getCurrentQuestion.typeStep == 6" :options="getCurrentQuestion.fields"></QuizRadioButtonImage>
                 <div class="imageAndOptions" v-if="getCurrentQuestion.type == 7">
                     <QuizRadioButton @addElem="addElem" class="imageAndOptions__options quiz-colom-2" :options=getCurrentQuestion.options></QuizRadioButton>
                     <img :src="getCurrentQuestion.imgPath" alt="">
                 </div>
-                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 8">
+                <div class="imageAndOptions" v-if="getCurrentQuestion.typeStep == 8">
                     <QuizCheckbox @addElem="addElem" class="imageAndOptions__options quiz-colom-2" :options=getCurrentQuestion.options></QuizCheckbox>
                     <img :src="getCurrentQuestion.imgPath" alt="">
                 </div>
-                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 9">
+                <div class="imageAndOptions" v-if="getCurrentQuestion.typeStep == 9">
                     <QuizInput @addElem="addElem" class="imageAndOptions__options quiz-colom-2" :options=getCurrentQuestion.options></QuizInput>
                     <img :src="getCurrentQuestion.imgPath" alt="">
                 </div>
-                <div class="imageAndOptions" v-if="getCurrentQuestion.type == 10">
+                <div class="imageAndOptions" v-if="getCurrentQuestion.typeStep == 10">
                     <QuizRange @addElem="addElem" class="imageAndOptions__options" :settings=getCurrentQuestion.settings></QuizRange>
                     <img :src="getCurrentQuestion.imgPath" alt="">
                 </div>
-                <QuizTextAndImage v-if="getCurrentQuestion.type == 11" :imgPath=getCurrentQuestion.imgPath :text=getCurrentQuestion.text></QuizTextAndImage>
-                <QuizFormFields @addElem="addElem" v-if="getCurrentQuestion.type == 12" :title=getCurrentQuestion.question :options=getCurrentQuestion.options :settings="getCurrentQuestion.settings"></QuizFormFields>
+                <QuizTextAndImage v-if="getCurrentQuestion.typeStep == 11" :imgPath=getCurrentQuestion.imgPath :text=getCurrentQuestion.text></QuizTextAndImage>
+                <QuizFormFields @addElem="addElem" v-if="getCurrentQuestion.typeStep == 12" :title=getCurrentQuestion.question :options=getCurrentQuestion.options :settings="getCurrentQuestion.settings"></QuizFormFields>
             </div>
-            <div class="quiz-container-bottom-menu" v-if="currentQuestion <= question.length - 2">
+            <div class="quiz-container-bottom-menu" v-if="currentQuestion <= question[0].steps.length">
                 <div class="quiz-container__step-count">
-                    <span>{{currentQuestion}}</span>/ {{question.length - 2}}
+                    <span>{{currentQuestion}}</span>/ {{question[0].steps.length}}
                     <div class="quiz-container__progress-bar"><div class="quiz-container__progress"></div></div>
                 </div>
-                <button @click="NextQuestion" :disabled="buttonDisabled"  class="then-button">Далее</button>
+                <button @click="NextQuestion" :disabled="buttonDisabled" class="then-button">Далее</button>
             </div>
+
+            {{ getCurrentQuestion }}
         </div>
         
     </div>
@@ -73,7 +76,7 @@
                 buttonDisabled: true,
                 valueObj: '',
                 result: [],
-                currentQuestion: 0,
+                currentQuestion: -1,
                 currentQuestionProcent: '0%'
             }
         },
@@ -94,13 +97,13 @@
             },
 
             NextQuestion() {
-                if (this.currentQuestion < this.question.length - 1) {
+                if (this.currentQuestion < this.question[0].steps.length - 1) {
                     this.currentQuestion++
-                    if(this.currentQuestion != 1){
-                        this.currentQuestionProcent = (100 / (this.question.length - 2) * (this.currentQuestion - 1)) + '%';
+                    if(this.currentQuestion != -1){
+                        this.currentQuestionProcent = (100 / (this.question[0].steps.length) * (this.currentQuestion)) + '%';
                         this.result[this.currentQuestion - 2] = this.valueObj;
                         
-                        if(this.question[this.currentQuestion].type != 11){
+                        if(this.question.steps[this.currentQuestion].type != 11){
                             this.buttonDisabled = true;
                         }else{
                             this.buttonDisabled = false;
@@ -112,9 +115,40 @@
         },
         computed: {
             getCurrentQuestion(){
-                let question = this.question[this.currentQuestion]
-                question.index = this.currentQuestion
+                if(this.currentQuestion != -1){
+                    let question = this.question[0].steps[this.currentQuestion]
+                    question.index = this.currentQuestion
+
+
+                    //Проверка выбранного шага на тип
+                    if(question.type == 1){
+                        //Есть ли у шага изображение?
+                        if(question.image != ""){
+                            //Проверка нет ли в ответах хоть у одгого элемента изображение
+                            let testStepImg = false
+                            for(let i = 0; i < question.steps.length; i++){
+                                if(question.steps[i].image == ""){
+                                    testStepImg = true;
+                                }
+                            }
+                            //Если нет
+                            if(testStepImg){
+                                question.typeStep = 1;
+                            }else{
+                                question.typeStep = 20; // ПОМЕНЯТЬ!!!!
+                            }
+                        }
+                    }else{
+                        question.typeStep = 1;
+                    }
+                
                 return question
+                }else{
+                    let question = this.question[0]
+                    question.index = this.currentQuestion
+                    return question;
+                }
+                
             }
         }
     }

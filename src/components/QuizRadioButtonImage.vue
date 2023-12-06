@@ -6,7 +6,7 @@
                 <input :value="item.id" v-model="data.value" v-on:change="actionElem" class="quiz-image-radio__input" name="radio_button_image" type="radio" v-bind:id="index+'_image-radio-button'">
                 <label class="quiz-image-radio__label" v-bind:for="index+'_image-radio-button'">
                     <img class="quiz-image-radio__image" v-bind:src="item.imgPath" alt="">
-                    <p v-if="item.text != ''" class="quiz-image-radio__text">{{ item.text }}</p>
+                    <p v-if="item.name != ''" class="quiz-image-radio__text">{{ item.name }}</p>
                 </label>
             </div>
         </div>
