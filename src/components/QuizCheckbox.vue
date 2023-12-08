@@ -1,9 +1,9 @@
 <template>
     <div class="QuizCheckbox">
-        <div v-for="(item, index) in options" v-bind:key="index">
+        <div v-for="(item, index) in options.fields" v-bind:key="index">
             <div class="quiz-button-checkbox">
-                <input v-model="data[item.id]" v-on:change="actionElem" class="quiz-button-checkbox__input" name="checkbox" v-bind:id="'checkbox_'+index" type="checkbox">
-                <label class="quiz-button-checkbox__label" v-bind:for="'checkbox_'+index">{{ item.text }}</label>
+                <input v-model="data[item.id]" v-on:change="actionElem" class="quiz-button-checkbox__input" name="checkbox" v-bind:id="'checkbox_'+quiz_id+'_'+options.index+'_'+index" type="checkbox">
+                <label class="quiz-button-checkbox__label" v-bind:for="'checkbox_'+quiz_id+'_'+options.index+'_'+index">{{ item.name }}</label>
             </div>
         </div>
     </div>
@@ -15,6 +15,12 @@
         emits: ['addElem'],
         props: {
             options: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            },
+            quiz_id: {
                 type: Object,
                 default: () => {
                     return {}

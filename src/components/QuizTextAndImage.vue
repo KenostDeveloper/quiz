@@ -7,9 +7,7 @@
 
 <template>
     <div class="QuizTextAndImage">
-        <div class="QuizTextAndImage__text-container">
-            <p v-for="(item) in props.text" v-bind:key="item.index" class="QuizTextAndImage__text">{{ item }}</p>
-        </div>
+        <p class="QuizTextAndImage__text">{{ props.text }}</p>
         <img class="QuizTextAndImage__image" v-bind:src="props.imgPath" alt="">
     </div>
     
@@ -27,13 +25,14 @@
         // width: 500px;
         object-fit: cover;
         margin-bottom: 16px;
-        width: 45%;
+        width: 50%;
     }
 
     &__text{
         margin-bottom: 8px;
         color: #414141;
         font-size: 16px;
+        width: 100%;
     }
 }
 

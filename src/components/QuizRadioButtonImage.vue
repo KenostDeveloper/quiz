@@ -1,11 +1,12 @@
 
 <template>
     <div class="QuizRadioButtonImage">
-        <div v-for="(item, index) in options" v-bind:key="index">
+        <div v-for="(item, index) in options.fields" v-bind:key="index">
+            {{ item.id }}
             <div class="quiz-image-radio">
-                <input :value="item.id" v-model="data.value" v-on:change="actionElem" class="quiz-image-radio__input" name="radio_button_image" type="radio" v-bind:id="index+'_image-radio-button'">
-                <label class="quiz-image-radio__label" v-bind:for="index+'_image-radio-button'">
-                    <img class="quiz-image-radio__image" v-bind:src="item.imgPath" alt="">
+                <input :value="item.id" v-model="data.value" v-on:change="actionElem" class="quiz-image-radio__input" name="radio_button_image" type="radio" v-bind:id="'image-radio-button_'+quiz_id+'_'+options.index+'_'+index">
+                <label class="quiz-image-radio__label" v-bind:for="'image-radio-button_'+quiz_id+'_'+options.index+'_'+index">
+                    <img class="quiz-image-radio__image" v-bind:src="item.image" alt="">
                     <p v-if="item.name != ''" class="quiz-image-radio__text">{{ item.name }}</p>
                 </label>
             </div>
@@ -14,6 +15,7 @@
 </template>
 
 <script>
+
     export default {
         name: 'QuizRadioImage',
         emits: ['addElem'],
@@ -23,11 +25,17 @@
                 default: () => {
                     return {}
                 }
-            }
+            },
+            quiz_id: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            } 
         },
         data() {
             return{
-                data: {value: ''}
+                data: {value: null}
             }
         },
         methods: {

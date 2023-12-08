@@ -1,9 +1,9 @@
 <template>
   <div class="QuizInput">
-    <div v-for="(item, index) in options" v-bind:key="item.index">
+    <div v-for="(item, index) in options.fields" v-bind:key="index">
       <div class="quiz-input">
-          <label  class="quiz-input__label" v-bind:id="'input_'+index">{{ item.label }}</label>
-          <input v-model="data[item.id]" v-on:change="actionElem" class="quiz-input__input" type="text" v-bind:placeholder="item.placeholder">
+          <label  class="quiz-input__label" v-bind:for="'input_'+quiz_id+'_'+options.index+'_'+index">{{ item.label }}</label>
+          <input v-model="data[item.id]" v-on:change="actionElem" :id="'input_'+quiz_id+'_'+options.index+'_'+index" class="quiz-input__input" type="text" v-bind:placeholder="item.placeholder">
       </div>
     </div>
   </div>
@@ -15,6 +15,12 @@
         emits: ['addElem'],
         props: {
             options: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            },
+            quiz_id: {
                 type: Object,
                 default: () => {
                     return {}

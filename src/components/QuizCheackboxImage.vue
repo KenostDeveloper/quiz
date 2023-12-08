@@ -1,11 +1,11 @@
 <template>
     <div class="QuizCheackboxImage">
-        <div class="QuizCheackboxImage__item" v-for="(item, index) in options" v-bind:key="index">
+        <div class="QuizCheackboxImage__item" v-for="(item, index) in options.fields" v-bind:key="index">
             <div @click="select" class="quiz-image-checkbox">
-                <input v-model="data[item.id]" v-on:change="actionElem" class="quiz-image-checkbox__input" name="cheackbox_image" type="checkbox" v-bind:id="index+'_image-cheackbox'">
-                <label class="quiz-image-checkbox__label" v-bind:for="index+'_image-cheackbox'">
-                    <img class="quiz-image-checkbox__image" v-bind:src="item.imgPath" alt="">
-                    <p v-if="item.text != ''" class="quiz-image-checkbox__text">{{ item.text }}</p>
+                <input v-model="data[item.id]" v-on:change="actionElem" class="quiz-image-checkbox__input" name="cheackbox_image" type="checkbox" v-bind:id="'image-cheackbox_'+quiz_id+'_'+options.index+'_'+index">
+                <label class="quiz-image-checkbox__label" v-bind:for="'image-cheackbox_'+quiz_id+'_'+options.index+'_'+index">
+                    <img class="quiz-image-checkbox__image" v-bind:src="item.image" alt="">
+                    <p v-if="item.name != ''" class="quiz-image-checkbox__text">{{ item.name }}</p>
                 </label>
             </div>
         </div>
@@ -22,7 +22,13 @@
                 default: () => {
                     return {}
                 }
-            }
+            },
+            quiz_id: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            } 
         },
         data() {
             return{

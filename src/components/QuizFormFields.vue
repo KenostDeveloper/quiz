@@ -2,19 +2,29 @@
 <template>
     <div class="QuizFormFields">
         
+        <div class="QuizFormFields__info" >
+            <h2 class="QuizFormFields__header">Оставьте ваши контактные данные</h2>
+            <img :src="options.image" alt="">
+        </div>
+
         <form class="QuizFormFields__form" action="">
-            <div class="quiz-input" v-for="(item, index) in options" v-bind:key="index">
-                <label class="quiz-input__label" v-bind:id="'input_'+index">{{ item.label }}</label>
-                <input v-model="data[item.id]" v-on:change="actionElem" class="quiz-input__input" type="text" v-bind:placeholder="item.placeholder">
+            <div class="quiz-input">
+                <label class="quiz-input__label" id="name">Введите ваше имя</label>
+                <input v-on:change="actionElem" for="name" class="quiz-input__input" type="text" placeholder="Иван">
             </div>
 
-            <div class="then-button">{{ settings[0].buttonText }}</div>
-        </form>
+            <div class="quiz-input">
+                <label class="quiz-input__label" id="phone">Введите ваш номер телефона</label>
+                <input v-on:change="actionElem" class="quiz-input__input" type="text" placeholder="+7(999)999-99-99">
+            </div>
 
-        <div class="QuizFormFields__info">
-            <h2 class="QuizFormFields__header">{{ title }}</h2>
-            <p class="QuizFormFields__text">{{ settings[0].text }}</p>
-        </div>
+            <div class="quiz-input">
+                <label class="quiz-input__label" id="email">Введите вашу почту</label>
+                <input v-on:change="actionElem" for="email" class="quiz-input__input" type="email" placeholder="name@gmail.com">
+            </div>
+
+            <div class="then-button">{{ options.btn_submit }}</div>
+        </form>
     </div>
     
 </template>
@@ -26,18 +36,6 @@
         emits: ['addElem'],
         props: {
             options: {
-                type: Object,
-                default: () => {
-                    return {}
-                }
-            },
-            settings: {
-                type: Object,
-                default: () => {
-                    return {}
-                }
-            },
-            title: {
                 type: Object,
                 default: () => {
                     return {}
@@ -67,6 +65,14 @@
     height: 100%;
     align-items: center;
     justify-content: space-evenly;
+
+    &__info{
+        img{
+           // border-radius: 33% 67% 70% 30% / 62% 41% 59% 38%;
+            //max-width: 446px;
+            //max-height: 446px;
+        }
+    }
 
     &__text{
         margin-bottom: 8px;
