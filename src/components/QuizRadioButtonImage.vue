@@ -2,7 +2,6 @@
 <template>
     <div class="QuizRadioButtonImage">
         <div v-for="(item, index) in options.fields" v-bind:key="index">
-            {{ item.id }}
             <div class="quiz-image-radio">
                 <input :value="item.id" v-model="data.value" v-on:change="actionElem" class="quiz-image-radio__input" name="radio_button_image" type="radio" v-bind:id="'image-radio-button_'+quiz_id+'_'+options.index+'_'+index">
                 <label class="quiz-image-radio__label" v-bind:for="'image-radio-button_'+quiz_id+'_'+options.index+'_'+index">
@@ -15,6 +14,8 @@
 </template>
 
 <script>
+
+
 
     export default {
         name: 'QuizRadioImage',

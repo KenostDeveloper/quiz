@@ -19,10 +19,12 @@
         },
         data() {
             return{
-                data: {valueRange: ''},
+                data: {valueRange: 0},
                 inputValue: '0',
                 inputMaxValue: 0,
-                cssInputValue: '50%'
+                inputMinValue: 0,
+                cssInputValue: '0%',
+                inputStep: 0,
             }
         },
         methods: {
@@ -32,6 +34,8 @@
             sliderChange(evt) {
                 this.inputMaxValue = evt.target.max
                 this.inputValue = evt.target.value
+                this.inputStep = evt.target.step
+                this.inputMinValue = evt.target.min
                 this.cssInputValue = this.inputValue / (this.inputMaxValue / 100) + "%"
             }
         }

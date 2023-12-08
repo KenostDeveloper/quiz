@@ -8,6 +8,16 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
+  server: {
+    proxy: {
+      "/assets": {
+        target: "https://new9.dart.agency/",
+        changeOrigin: true,
+        secure: false,
+        // rewrite: (path) => path.replace(/^\/assets/, ''),
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

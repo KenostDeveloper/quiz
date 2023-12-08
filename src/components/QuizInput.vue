@@ -3,7 +3,7 @@
     <div v-for="(item, index) in options.fields" v-bind:key="index">
       <div class="quiz-input">
           <label  class="quiz-input__label" v-bind:for="'input_'+quiz_id+'_'+options.index+'_'+index">{{ item.label }}</label>
-          <input v-model="data[item.id]" v-on:change="actionElem" :id="'input_'+quiz_id+'_'+options.index+'_'+index" class="quiz-input__input" type="text" v-bind:placeholder="item.placeholder">
+          <input v-model="data[index]" v-on:change="actionElem" :id="'input_'+quiz_id+'_'+options.index+'_'+index" class="quiz-input__input" type="text" v-bind:placeholder="item.placeholder">
       </div>
     </div>
   </div>
