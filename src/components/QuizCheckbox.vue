@@ -2,7 +2,7 @@
     <div class="QuizCheckbox">
         <div v-for="(item, index) in options.fields" v-bind:key="index">
             <div class="quiz-button-checkbox">
-                <input v-model="data[item.id]" v-on:change="actionElem" class="quiz-button-checkbox__input" name="checkbox" v-bind:id="'checkbox_'+quiz_id+'_'+options.index+'_'+index" type="checkbox">
+                <input v-model="data[index]" :value="item.name" v-on:change="actionElem" class="quiz-button-checkbox__input" name="checkbox" v-bind:id="'checkbox_'+quiz_id+'_'+options.index+'_'+index" type="checkbox">
                 <label class="quiz-button-checkbox__label" v-bind:for="'checkbox_'+quiz_id+'_'+options.index+'_'+index">{{ item.name }}</label>
             </div>
         </div>
@@ -29,12 +29,20 @@
         },
         data() {
             return{
-                data: []
+                data: [],
+                result: { value: []}
             }
         },
         methods: {
             actionElem () {
-                this.$emit('addElem', this.data)
+                let count = 0
+                for(let i = 0; i < this.data.length; i++){
+                    if(this.data[i]){
+                        this.result.value[count] = this.options.fields[i].name;
+                        count++;
+                    }
+                }
+                this.$emit('addElem', this.result)
             }
         }
     }

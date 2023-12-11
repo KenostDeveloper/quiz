@@ -3,7 +3,7 @@
     <div class="QuizRadioButton">
         <div v-for="(item, index) in options.fields" v-bind:key="index">
             <div class="quiz-button-radio">
-                <input :value="item.id" v-model="data.value" v-on:change="actionElem" class="quiz-button-radio__input" name="radio" v-bind:id="'radio_'+quiz_id+'_'+options.index+'_'+index" type="radio">
+                <input :value="item.name" v-model="data.answer" v-on:change="actionElem" class="quiz-button-radio__input" name="radio" v-bind:id="'radio_'+quiz_id+'_'+options.index+'_'+index" type="radio">
                 <label class="quiz-button-radio__label" v-bind:for="'radio_'+quiz_id+'_'+options.index+'_'+index">{{ item.name }}</label>
             </div>
         </div>
@@ -31,7 +31,7 @@
         },
         data() {
             return{
-                data: {value: ''}
+                data: {answer: ''}
             }
         },
         methods: {

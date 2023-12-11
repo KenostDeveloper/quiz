@@ -2,7 +2,7 @@
     <div class="QuizCheackboxImage">
         <div class="QuizCheackboxImage__item" v-for="(item, index) in options.fields" v-bind:key="index">
             <div @click="select" class="quiz-image-checkbox">
-                <input v-model="data[item.id]" v-on:change="actionElem" class="quiz-image-checkbox__input" name="cheackbox_image" type="checkbox" v-bind:id="'image-cheackbox_'+quiz_id+'_'+options.index+'_'+index">
+                <input v-model="data[index]" :value="item.name" v-on:change="actionElem" class="quiz-image-checkbox__input" name="cheackbox_image" type="checkbox" v-bind:id="'image-cheackbox_'+quiz_id+'_'+options.index+'_'+index">
                 <label class="quiz-image-checkbox__label" v-bind:for="'image-cheackbox_'+quiz_id+'_'+options.index+'_'+index">
                     <img class="quiz-image-checkbox__image" v-bind:src="item.image" alt="">
                     <p v-if="item.name != ''" class="quiz-image-checkbox__text">{{ item.name }}</p>
@@ -32,12 +32,20 @@
         },
         data() {
             return{
-                data: []
+                data: [],
+                result: { value: []}
             }
         },
         methods: {
             actionElem () {
-                this.$emit('addElem', this.data)
+                let count = 0
+                for(let i = 0; i < this.data.length; i++){
+                    if(this.data[i]){
+                        this.result.value[count] = this.options.fields[i].name;
+                        count++;
+                    }
+                }
+                this.$emit('addElem', this.result)
             }
         }
     }
