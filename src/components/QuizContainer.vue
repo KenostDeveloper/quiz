@@ -1,6 +1,6 @@
 <template>
     <div class="quiz-container">
-        <!-- {{ question }} -->
+        <!-- {{ question[0] }} -->
         <div class="quiz-container__quiz-start" v-if="getCurrentQuestion.index == -1">
             <div class="quiz-container__img">
                 <img v-bind:src="getCurrentQuestion.image" v-bind:alt="getCurrentQuestion.name" />
@@ -8,18 +8,132 @@
             <div class="quiz-container__info">
                 <h1 class="quiz-container__header">{{ getCurrentQuestion.name }}</h1>
                 <p class="quiz-container__desc">{{ getCurrentQuestion.description }}</p>
+
+                <div class="bonuses">
+                    <p class="bonuses__header">После теста вы получите:</p>
+                    <div class="bonuses__el">
+                        <img src="../assets/lock.svg" alt="" />
+                        <p>КП на 3 модели</p>
+                    </div>
+
+                    <div class="bonuses__el">
+                        <img src="../assets/lock.svg" alt="" />
+                        <p>Скидка до 50% на доставку</p>
+                    </div>
+
+                    <div class="bonuses__el">
+                        <img src="../assets/lock.svg" alt="" />
+                        <p>3 подарка на выбор</p>
+                    </div>
+                </div>
+
                 <div class="quiz-container__button" @click="NextQuestion">
-                    {{ getCurrentQuestion.btn_start }}
+                    {{
+                        getCurrentQuestion.btn_start != '' ? getCurrentQuestion.btn_start : 'Начать'
+                    }}
                 </div>
             </div>
         </div>
 
-        <div class="quiz-container__quiz-start" v-if="currentQuestion == question[0].steps.length">
+        <div class="quiz-container__quiz-start" v-if="ifPassed">
+            <div class="quiz-container__img">
+                <img
+                    v-bind:src="
+                        question[0].answer_image != ''
+                            ? question[0].answer_image
+                            : question[0].image
+                    "
+                    v-bind:alt="getCurrentQuestion.name"
+                />
+            </div>
+            <div class="quiz-container__info">
+                <p class="quiz-container__desc">{{ question[0].answer }}</p>
+                <a
+                    v-if="question[0].btn_answer != ''"
+                    :href="question[0].btn_answer_link"
+                    class="quiz-container__button"
+                >
+                    {{ question[0].btn_answer }}
+                </a>
+            </div>
+        </div>
+        <div
+            class="quiz-container__quiz-start"
+            v-if="currentQuestion == question[0].steps.length && !ifPassed"
+        >
             <div class="quiz-container__img">
                 <img v-bind:src="getCurrentQuestion.image" v-bind:alt="getCurrentQuestion.name" />
             </div>
             <div class="quiz-container__info quiz-container_center">
-                <form class="QuizFormFields__form" onsubmit="return false;">
+                <h6>Куда вам удобнее отправить?</h6>
+                <div class="quiz-container__contact">
+                    <div class="quiz-container__el" @click="changeContat(1)">
+                        <div
+                            class="quiz-container__image-contact quiz-container__image-contact-whatsapp"
+                        >
+                            <img src="../assets/contact/whatsapp.svg" alt="" />
+                        </div>
+                        <p>WhatsApp</p>
+                    </div>
+                    <div class="quiz-container__el" @click="changeContat(2)">
+                        <div
+                            class="quiz-container__image-contact quiz-container__image-contact-viber"
+                        >
+                            <img src="../assets/contact/viber.svg" alt="" />
+                        </div>
+                        <p>Viber</p>
+                    </div>
+                    <div class="quiz-container__el" @click="changeContat(3)">
+                        <div
+                            class="quiz-container__image-contact quiz-container__image-contact-telegram"
+                        >
+                            <img src="../assets/contact/telegram.svg" alt="" />
+                        </div>
+                        <p>Telegram</p>
+                    </div>
+                    <div class="quiz-container__el" @click="changeContat(4)">
+                        <div
+                            class="quiz-container__image-contact quiz-container__image-contact-mail"
+                        >
+                            <img src="../assets/contact/email.svg" alt="" />
+                        </div>
+                        <p>Email</p>
+                    </div>
+                </div>
+
+                <div class="quiz-container__inputs">
+                    <input
+                        v-on:change="actionElem"
+                        class="quiz-input__input"
+                        type="text"
+                        :placeholder="inputText"
+                        name="tel"
+                    />
+                    <input
+                        v-if="inputText == 'Укажите ваш телефон'"
+                        v-on:change="actionElem"
+                        for="email"
+                        class="quiz-input__input"
+                        type="email"
+                        name="mail"
+                        placeholder="Укажите вашу почту"
+                    />
+                </div>
+
+                <button
+                    @click="dartQuizSubmit"
+                    id="dartquiz-form"
+                    class="then-button then-button-submit"
+                >
+                    {{
+                        getCurrentQuestion.btn_submit != ''
+                            ? getCurrentQuestion.btn_submit
+                            : 'Отправить'
+                    }}
+                </button>
+                <p class="errorform"></p>
+
+                <!-- <form class="QuizFormFields__form" onsubmit="return false;">
                     <div class="quiz-input">
                         <label class="quiz-input__label" id="name">Введите ваше имя</label>
                         <input
@@ -31,7 +145,7 @@
                             placeholder="Иван"
                         />
                     </div>
-                    <p class="errorform"> </p>
+                    <p class="errorform"></p>
                     <div class="quiz-input">
                         <label class="quiz-input__label" id="phone"
                             >Введите ваш номер телефона</label
@@ -45,7 +159,7 @@
                             v-maska="'+7 (###) ###-##-##'"
                         />
                     </div>
-                    <p class="errorform"> </p>
+                    <p class="errorform"></p>
                     <div class="quiz-input">
                         <label class="quiz-input__label" id="email">Введите вашу почту</label>
                         <input
@@ -57,15 +171,19 @@
                             placeholder="name@gmail.com"
                         />
                     </div>
-                    <p class="errorform"> </p>
+                    <p class="errorform"></p>
                     <button
                         @click="dartQuizSubmit"
                         id="dartquiz-form"
                         class="then-button then-button-submit"
                     >
-                        {{ getCurrentQuestion.btn_submit }}
+                        {{
+                            getCurrentQuestion.btn_submit != ''
+                                ? getCurrentQuestion.btn_submit
+                                : 'Отправить'
+                        }}
                     </button>
-                </form>
+                </form> -->
             </div>
         </div>
         <div
@@ -79,9 +197,12 @@
             <div class="quiz-container__content">
                 <div v-for="(item, index) in question[0].steps" v-bind:key="index">
                     <div v-if="index == currentQuestion">
+                        <div class="quiz-container__description">
+                            <div class="quiz-container__description-text">Выберите один или несколько вариантов</div>
+                        </div>
                         <div class="imageAndOptions" v-if="getCurrentQuestion.type == 1">
                             <QuizRadioButton
-                                @addElem="addElem"
+                                @addElem="addElemCheack"
                                 class="imageAndOptions__options quiz-colom-2"
                                 :options="getCurrentQuestion"
                                 :quiz_id="question[0].id"
@@ -134,7 +255,7 @@
 
                         <div class="imageAndOptions" v-if="getCurrentQuestion.type == 6">
                             <QuizRadioButtonImage
-                                @addElem="addElem"
+                                @addElem="addElemCheack"
                                 :class="
                                     getCurrentQuestion.image == ''
                                         ? 'imageAndOptions__options quiz-colom-4'
@@ -187,11 +308,47 @@
                         :disabled="buttonPrevDisabled"
                         class="then-button"
                     >
-                        {{ question[0].btn_prev }}
+                        {{ question[0].btn_prev != '' ? question[0].btn_prev : 'Далее' }}
                     </button>
                     <button @click="NextQuestion" :disabled="buttonDisabled" class="then-button">
-                        {{ question[0].btn_next }}
+                        {{ question[0].btn_next != '' ? question[0].btn_next : 'Назад' }}
                     </button>
+                </div>
+            </div>
+        </div>
+        <div
+            class="quiz-info"
+            v-if="getCurrentQuestion.index > -1 && currentQuestion != question[0].steps.length"
+        >
+            <div class="quiz-info__menbager">
+                <img src="http://localhost:3000/img/quiz/quiz_info_owner.png" alt="" />
+                <div class="quiz-info__menbager-name">
+                    <div class="text">
+                        Иванов <br />
+                        Иван
+                    </div>
+                    <div class="quiz-info__online">Онлайн</div>
+                </div>
+                <p>
+                    Менеджер по работе с клиентами Пройдите тест и я лично рассчитаю стоимость
+                    снегохода с доставкой в 3-х вариантах
+                </p>
+            </div>
+            <div class="bonuses bonuses-padding">
+                <p class="bonuses__header">После теста вы получите:</p>
+                <div class="bonuses__el">
+                    <img src="../assets/lock.svg" alt="" />
+                    <p>КП на 3 модели</p>
+                </div>
+
+                <div class="bonuses__el">
+                    <img src="../assets/lock.svg" alt="" />
+                    <p>Скидка до 50% на доставку</p>
+                </div>
+
+                <div class="bonuses__el">
+                    <img src="../assets/lock.svg" alt="" />
+                    <p>3 подарка на выбор</p>
                 </div>
             </div>
         </div>
@@ -211,17 +368,18 @@ import QuizTextAndImage from './QuizTextAndImage.vue'
 </script>
 
 <script>
-
-
 export default {
     data() {
         return {
             buttonDisabled: true,
             buttonPrevDisabled: true,
+            ifPassed: false,
             valueObj: '',
             result: [],
             currentQuestion: -1,
-            currentQuestionProcent: '0%'
+            currentQuestionProcent: '0%',
+            inputText: 'Укажите ваш телефон в WhatsApp',
+            sosial: 'WhatsApp'
         }
     },
     props: {
@@ -237,9 +395,32 @@ export default {
             this.valueObj = data
             this.valueObj.question = this.getCurrentQuestion.name
 
-            // console.dir(this.result)
-            // console.log(Object.values(data).filter(item => item).length === 1);
             this.buttonDisabled = false
+        },
+
+        addElemCheack(data) {
+            this.valueObj = data
+            this.valueObj.question = this.getCurrentQuestion.name
+            this.buttonDisabled = false
+            setTimeout(() => {
+                this.NextQuestion()
+            }, 500)
+        },
+
+        changeContat(number) {
+            if (number == 1) {
+                this.inputText = 'Укажите ваш телефон в WhatsApp'
+                this.sosial = "WhatsApp"
+            } else if (number == 2) {
+                this.inputText = 'Укажите ваш телефон в Viber'
+                this.sosial = "Viber"
+            } else if (number == 3) {
+                this.inputText = 'Укажите ваш телефон в Telegram'
+                this.sosial = "Telegram"
+            } else if (number == 4) {
+                this.inputText = 'Укажите ваш телефон'
+                this.sosial = "Почта"
+            }
         },
 
         NextQuestion() {
@@ -255,16 +436,20 @@ export default {
                         (100 / this.question[0].steps.length) * this.currentQuestion + '%'
                     // console.log(this.currentQuestion)
 
-                    if (this.question[0].steps[this.currentQuestion - 1].type != 5) {
-                        this.result[this.currentQuestion - 1] = this.valueObj
-                    } else {
-                        this.result[this.currentQuestion - 1] = 'Инфо-блок'
-                    }
+                    try {
+                        if (this.question[0].steps[this.currentQuestion - 1].type != 5) {
+                            this.result[this.currentQuestion - 1] = this.valueObj
+                        } else {
+                            this.result[this.currentQuestion - 1] = { question: 'Инфо-блок' }
+                        }
 
-                    if (this.question[0].steps[this.currentQuestion].type != 5) {
-                        this.buttonDisabled = true
-                    } else {
-                        this.buttonDisabled = false
+                        if (this.question[0].steps[this.currentQuestion].type != 5) {
+                            this.buttonDisabled = true
+                        } else {
+                            this.buttonDisabled = false
+                        }
+                    } catch {
+                        null
                     }
                 }
                 return
@@ -296,35 +481,36 @@ export default {
 
         dartQuizSubmit() {
             const errorMes = document.querySelectorAll('.errorform')
-
-            if (document.querySelector('input[name="name"]').value == '') {
-                errorMes[0].innerText = 'Пожалуйста, введите своё имя!'
-            } else {
-                errorMes[0].innerText = ' '
-            }
+            errorMes[0].innerText = ' '
 
             if (document.querySelector('input[name="tel"]').value == '') {
-                errorMes[1].innerText = 'Пожалуйста, введите номер телефона!'
-            } else {
-                errorMes[1].innerText = ' '
+                errorMes[0].innerText = 'Пожалуйста, введите номер телефона!'
             }
 
-            if (document.querySelector('input[name="mail"]').value == '') {
-                errorMes[2].innerText = 'Пожалуйста, введите свою почту!'
-            } else {
-                errorMes[2].innerText = ' '
-            }
-
-            if(document.querySelector('input[name="name"]').value != '' && document.querySelector('input[name="tel"]').value != '' && document.querySelector('input[name="mail"]').value != ''){
-                const data = {
-                    dq_action: {
-                        name: document.querySelector('input[name="name"]').value,
-                        phone: document.querySelector('input[name="tel"]').value,
-                        email: document.querySelector('input[name="mail"]').value,
-                        data: this.result
-                    }
+            if(document.querySelector('input[name="mail"]')){
+                if (
+                document.querySelector('input[name="mail"]').value == '' &&
+                this.inputText == 'Укажите ваш телефон'
+                ) {
+                    errorMes[0].innerText = 'Пожалуйста, введите свою почту!'
                 }
+            }
+            
+
+            if (document.querySelector('input[name="tel"]').value != '') {
+                const data = {
+                    dq_action: 'quiz/send',
+                    phone: document.querySelector('input[name="tel"]').value,
+                    data: this.result,
+                    sosial: this.sosial
+                }
+
+                if(document.querySelector('input[name="mail"]')){
+                    data.email = document.querySelector('input[name="mail"]').value;
+                }
+
                 
+
                 fetch('/assets/components/dartquiz/action.php', {
                     method: 'POST',
                     body: JSON.stringify(data),
@@ -332,9 +518,10 @@ export default {
                         Accept: 'application/json',
                         'Content-Type': 'application/json'
                     }
+                }).then(() => {
+                    this.ifPassed = true
                 })
             }
-            
         }
     },
     computed: {
@@ -383,6 +570,131 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.bonuses {
+    margin-bottom: 20px;
+
+    &__header {
+        font-weight: 700;
+        font-size: 14px;
+        color: #363636;
+        margin: 0px 0px 10px 0;
+    }
+
+    &__el {
+        display: flex;
+        position: relative;
+        align-items: center;
+        background: #d1398030;
+        border-radius: 5px;
+        padding: 10px 10px 10px 10px;
+        gap: 5px;
+        margin-bottom: 10px;
+
+        img {
+            width: 20px;
+            height: 20px;
+            fill: #ae2f6a;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1;
+        }
+    }
+
+    &-padding {
+        padding: 5px 20px;
+
+        .bonuses__header {
+            font-size: 12px;
+            margin: 10px 0 6px 0;
+        }
+    }
+}
+
+.quiz-info {
+    width: 30%;
+    min-width: 210px;
+    font-family: 'Roboto', sans-serif;
+    padding: 30px 0px 30px 0px;
+    background: #e3e3e3;
+    border-radius: 0 32px 32px 0;
+
+    &__menbager-name {
+        position: relative;
+    }
+
+    &__menbager {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        .text {
+            background: #d13980;
+            border-radius: 5px;
+            transform: skew(-10deg);
+            padding: 6px 15px;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 1;
+            text-align: center;
+            letter-spacing: 0.05em;
+            color: #ffffff;
+            width: 120px;
+            position: relative;
+        }
+
+        p {
+            font-weight: 300;
+            font-size: 12px;
+            line-height: 1;
+            text-align: center;
+            padding: 10px 20px 0 20px;
+        }
+    }
+
+    &__online {
+        background: #fff;
+        border-radius: 500px;
+        padding: 0 20px 0 10px;
+        height: 20px;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 1;
+        text-align: center;
+        letter-spacing: 0.02em;
+        color: #d13980;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        right: -25px;
+        top: -14px;
+        border: solid 1px #d13980;
+
+        &::before {
+            content: '';
+            position: absolute;
+            z-index: 1;
+            width: 10px;
+            height: 10px;
+            background: #d13980;
+            animation: blinker 0.5s ease infinite alternate;
+            border-radius: 50%;
+            right: 6px;
+        }
+    }
+}
+
+@keyframes blinker {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
 .errorform {
     color: #db3e3e;
     margin-top: 3px;
@@ -487,7 +799,7 @@ export default {
 }
 
 .then-button-submit {
-    width: 100%;
+    width: 90%;
 }
 
 .quiz-colom-2 {
@@ -505,6 +817,7 @@ export default {
 .imageAndOptions {
     display: flex;
     align-items: flex-start;
+    flex-direction: column-reverse;
     width: 100%;
     gap: 20px;
 
@@ -514,7 +827,7 @@ export default {
     }
 
     img {
-        width: 50%;
+        max-width: 200px;
         position: sticky;
         top: 0;
     }
@@ -523,6 +836,70 @@ export default {
     display: flex;
     background-color: #ffffff;
     border-radius: 32px;
+
+    
+    &__description{
+        background: #d1398062;
+        border: solid 1px #d13980;
+        width: fit-content;
+        padding: 3px 10px;
+        border-radius: 6px;
+        font-family: monospace;
+        margin-bottom: 8px;
+    }
+
+    &__contact {
+        display: flex;
+    }
+
+    &__inputs {
+        width: 90%;
+        margin-top: 20px;
+        display: flex;
+        gap: 12px;
+        flex-direction: column;
+    }
+
+    &__el {
+        width: 25%;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+    }
+
+    &__image-contact {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+
+        img {
+            width: 30px;
+            height: 30px;
+        }
+
+        width: 60px;
+        height: 60px;
+
+        &-whatsapp {
+            background: #25d266;
+        }
+
+        &-viber {
+            background: #7460f3;
+        }
+
+        &-telegram {
+            background: #00a2f2;
+        }
+
+        &-mail {
+            background: #36c14a;
+        }
+    }
 
     &__progress {
         width: v-bind(currentQuestionProcent);
@@ -585,7 +962,7 @@ export default {
     }
 
     &__quiz {
-        padding: 30px 50px;
+        padding: 30px 20px 30px 50px;
         flex-direction: column;
         align-items: flex-start;
         width: 100%;
@@ -643,6 +1020,12 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: flex-start;
+
+        h6 {
+            font-size: 18px;
+            font-family: monospace;
+            margin-bottom: 13px;
+        }
     }
 
     &_center {
@@ -802,6 +1185,9 @@ export default {
 }
 
 @media only screen and (max-width: 600px) {
+    .quiz-info {
+        display: none;
+    }
     .quiz-container {
         &__img {
             width: 100%;

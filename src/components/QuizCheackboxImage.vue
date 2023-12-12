@@ -90,7 +90,9 @@
 
     &__image{
         height: 100% !important;
-        object-fit: cover;
+        padding: 10px;
+        max-height: 60px;
+        object-fit: contain;
         border-radius: 5px 5px 0 0;
     }
 

@@ -3,7 +3,7 @@
     <div class="QuizRadioButtonImage">
         <div v-for="(item, index) in options.fields" v-bind:key="index">
             <div class="quiz-image-radio">
-                <input :value="item.name" v-model="data.value" v-on:change="actionElem" class="quiz-image-radio__input" name="radio_button_image" type="radio" v-bind:id="'image-radio-button_'+quiz_id+'_'+options.index+'_'+index">
+                <input :value="item.name" v-model="data.value[0]" v-on:change="actionElem" class="quiz-image-radio__input" name="radio_button_image" type="radio" v-bind:id="'image-radio-button_'+quiz_id+'_'+options.index+'_'+index">
                 <label class="quiz-image-radio__label" v-bind:for="'image-radio-button_'+quiz_id+'_'+options.index+'_'+index">
                     <img class="quiz-image-radio__image" v-bind:src="item.image" alt="">
                     <p v-if="item.name != ''" class="quiz-image-radio__text">{{ item.name }}</p>
@@ -36,7 +36,7 @@
         },
         data() {
             return{
-                data: {value: null}
+                data: {value: []}
             }
         },
         methods: {
@@ -81,9 +81,10 @@
     }
 
     &__image{
-        object-fit: cover;
         border-radius: 5px 5px 0 0;
-        height: 100% !important;
+        padding: 10px;
+        max-height: 60px;
+        object-fit: contain;
     }
 
     &__text{

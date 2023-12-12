@@ -1,7 +1,7 @@
 <template>
     <div class="quiz-range">
         <label class="quiz-range__label" >{{ inputValue }}</label>
-        <input v-model="data.valueRange" v-on:change="actionElem" v-on:input="sliderChange" :min="settings[0].sliderMinValue" :max="settings[0].sliderMaxValue" :step="settings[0].sliderStepValue" class="quiz-range__input" type="range" placeholder="Введите текст">
+        <input v-model="data.value[0]" v-on:change="actionElem" v-on:input="sliderChange" :min="settings[0].sliderMinValue" :max="settings[0].sliderMaxValue" :step="settings[0].sliderStepValue" class="quiz-range__input" type="range" placeholder="Введите текст">
     </div>
 </template>
 
@@ -19,7 +19,7 @@
         },
         data() {
             return{
-                data: {valueRange: 0},
+                data: {value: [0]},
                 inputValue: '0',
                 inputMaxValue: 0,
                 inputMinValue: 0,

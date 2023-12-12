@@ -43,6 +43,7 @@ import QuizContainer from './components/QuizContainer.vue';
     &__full{
       width: 80vw;
       height: 80vh;
+      box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.14), 0px 3px 14px rgba(0, 0, 0, 0.12), 0px 5px 5px rgba(0, 0, 0, 0.2);
     }
   }
 
