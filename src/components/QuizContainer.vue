@@ -9,21 +9,11 @@
                 <h1 class="quiz-container__header">{{ getCurrentQuestion.name }}</h1>
                 <p class="quiz-container__desc">{{ getCurrentQuestion.description }}</p>
 
-                <div class="bonuses">
+                <div class="bonuses" >
                     <p class="bonuses__header">После теста вы получите:</p>
-                    <div class="bonuses__el">
+                    <div v-for="(item, index) in question[0].bonuses" v-bind:key="index" class="bonuses__el">
                         <img src="../assets/lock.svg" alt="" />
-                        <p>КП на 3 модели</p>
-                    </div>
-
-                    <div class="bonuses__el">
-                        <img src="../assets/lock.svg" alt="" />
-                        <p>Скидка до 50% на доставку</p>
-                    </div>
-
-                    <div class="bonuses__el">
-                        <img src="../assets/lock.svg" alt="" />
-                        <p>3 подарка на выбор</p>
+                        <p>{{item.name}}</p>
                     </div>
                 </div>
 
@@ -132,58 +122,6 @@
                     }}
                 </button>
                 <p class="errorform"></p>
-
-                <!-- <form class="QuizFormFields__form" onsubmit="return false;">
-                    <div class="quiz-input">
-                        <label class="quiz-input__label" id="name">Введите ваше имя</label>
-                        <input
-                            v-on:change="actionElem"
-                            for="name"
-                            name="name"
-                            class="quiz-input__input"
-                            type="text"
-                            placeholder="Иван"
-                        />
-                    </div>
-                    <p class="errorform"></p>
-                    <div class="quiz-input">
-                        <label class="quiz-input__label" id="phone"
-                            >Введите ваш номер телефона</label
-                        >
-                        <input
-                            v-on:change="actionElem"
-                            class="quiz-input__input"
-                            type="text"
-                            placeholder="+7(999)999-99-99"
-                            name="tel"
-                            v-maska="'+7 (###) ###-##-##'"
-                        />
-                    </div>
-                    <p class="errorform"></p>
-                    <div class="quiz-input">
-                        <label class="quiz-input__label" id="email">Введите вашу почту</label>
-                        <input
-                            v-on:change="actionElem"
-                            for="email"
-                            class="quiz-input__input"
-                            type="email"
-                            name="mail"
-                            placeholder="name@gmail.com"
-                        />
-                    </div>
-                    <p class="errorform"></p>
-                    <button
-                        @click="dartQuizSubmit"
-                        id="dartquiz-form"
-                        class="then-button then-button-submit"
-                    >
-                        {{
-                            getCurrentQuestion.btn_submit != ''
-                                ? getCurrentQuestion.btn_submit
-                                : 'Отправить'
-                        }}
-                    </button>
-                </form> -->
             </div>
         </div>
         <div
@@ -197,8 +135,8 @@
             <div class="quiz-container__content">
                 <div v-for="(item, index) in question[0].steps" v-bind:key="index">
                     <div v-if="index == currentQuestion">
-                        <div class="quiz-container__description">
-                            <div class="quiz-container__description-text">Выберите один или несколько вариантов</div>
+                        <div class="quiz-container__description" v-if="getCurrentQuestion.correction != ''">
+                            <div class="quiz-container__description-text">{{getCurrentQuestion.correction}}</div>
                         </div>
                         <div class="imageAndOptions" v-if="getCurrentQuestion.type == 1">
                             <QuizRadioButton
@@ -287,6 +225,12 @@
                                 alt=""
                             />
                         </div>
+                        <div class="quiz-container__skip" v-if="getCurrentQuestion.skip == 1">
+                            <div class="quiz-button-radio">
+                                <input @click="NextQuestionTimeOut" v-on:change="actionElem" class="quiz-button-radio__input" name="radio" id="radio_skip" type="radio">
+                                <label class="quiz-button-radio__label" for="radio_skip">Пропустить</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -298,7 +242,7 @@
                 <div class="quiz-container__step-count">
                     <span>{{ currentQuestion + 1 }}</span
                     >/ {{ question[0].steps.length }}
-                    <div class="quiz-container__progress-bar">
+                    <div class="quiz-container__progress-bar" v-if="question[0].progress == 1">
                         <div class="quiz-container__progress"></div>
                     </div>
                 </div>
@@ -321,34 +265,22 @@
             v-if="getCurrentQuestion.index > -1 && currentQuestion != question[0].steps.length"
         >
             <div class="quiz-info__menbager">
-                <img src="http://localhost:3000/img/quiz/quiz_info_owner.png" alt="" />
+                <img :src="question[0].manager_image" alt="" />
                 <div class="quiz-info__menbager-name">
                     <div class="text">
-                        Иванов <br />
-                        Иван
+                        {{ question[0].manager_name != "" ? question[0].manager_name : "Иванов Иван" }}
                     </div>
                     <div class="quiz-info__online">Онлайн</div>
                 </div>
                 <p>
-                    Менеджер по работе с клиентами Пройдите тест и я лично рассчитаю стоимость
-                    снегохода с доставкой в 3-х вариантах
+                    {{ question[0].manager_description }}
                 </p>
             </div>
             <div class="bonuses bonuses-padding">
                 <p class="bonuses__header">После теста вы получите:</p>
-                <div class="bonuses__el">
+                <div v-for="(item, index) in question[0].bonuses" v-bind:key="index" class="bonuses__el">
                     <img src="../assets/lock.svg" alt="" />
-                    <p>КП на 3 модели</p>
-                </div>
-
-                <div class="bonuses__el">
-                    <img src="../assets/lock.svg" alt="" />
-                    <p>Скидка до 50% на доставку</p>
-                </div>
-
-                <div class="bonuses__el">
-                    <img src="../assets/lock.svg" alt="" />
-                    <p>3 подарка на выбор</p>
+                    <p>{{item.name}}</p>
                 </div>
             </div>
         </div>
@@ -421,6 +353,14 @@ export default {
                 this.inputText = 'Укажите ваш телефон'
                 this.sosial = "Почта"
             }
+        },
+
+        NextQuestionTimeOut(){
+            this.valueObj = [{ value: 'Пропуск шага'}],
+            this.valueObj.question = this.getCurrentQuestion.name
+            setTimeout(() => {
+                this.NextQuestion()
+            }, 500)
         },
 
         NextQuestion() {
@@ -570,6 +510,54 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+.quiz-button-radio{
+    // margin-bottom: 16px;
+    &__label{
+        width: fit-content;
+        padding: 10px 40px 10px 16px;
+        background: #ffffff;
+        color: #000000;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        border-radius: 8px;
+        border: 3px solid #c9c9c9;
+        border-bottom: 5px solid #c9c9c9;
+    }
+
+    &__input{
+        display: none;
+    }
+
+    &__label:after,
+    &__label:before {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+    }
+    &__label:after {
+        height: 19px;
+        width: 19px;
+        border: 2px solid #c9c9c9;
+        right: 16px;
+    }
+    &__input:checked ~ label {
+        border-color: #d13980;
+    }
+    &__input:checked ~ label::before {
+        background: #d13980;
+        height: 17px;
+        width: 17px;
+        content: "";
+        position: absolute;
+        opacity: 1;
+        right: 17px;
+        visibility: visible;
+        transform: scale(1);
+    }
+}
 .bonuses {
     margin-bottom: 20px;
 
@@ -642,6 +630,7 @@ export default {
             color: #ffffff;
             width: 120px;
             position: relative;
+            word-spacing: 100vw
         }
 
         p {
@@ -654,7 +643,7 @@ export default {
     }
 
     &__online {
-        background: #fff;
+        background: #25D366;
         border-radius: 500px;
         padding: 0 20px 0 10px;
         height: 20px;
@@ -663,14 +652,14 @@ export default {
         line-height: 1;
         text-align: center;
         letter-spacing: 0.02em;
-        color: #d13980;
+        color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
         position: absolute;
         right: -25px;
         top: -14px;
-        border: solid 1px #d13980;
+        border: solid 1px #25D366;
 
         &::before {
             content: '';
@@ -678,7 +667,7 @@ export default {
             z-index: 1;
             width: 10px;
             height: 10px;
-            background: #d13980;
+            background: #fff;
             animation: blinker 0.5s ease infinite alternate;
             border-radius: 50%;
             right: 6px;
@@ -837,6 +826,10 @@ export default {
     background-color: #ffffff;
     border-radius: 32px;
 
+    &__skip{
+        margin-top: 10px;
+    }
+
     
     &__description{
         background: #d1398062;
@@ -844,7 +837,6 @@ export default {
         width: fit-content;
         padding: 3px 10px;
         border-radius: 6px;
-        font-family: monospace;
         margin-bottom: 8px;
     }
 
@@ -1023,7 +1015,6 @@ export default {
 
         h6 {
             font-size: 18px;
-            font-family: monospace;
             margin-bottom: 13px;
         }
     }
