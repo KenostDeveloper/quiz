@@ -9,13 +9,16 @@
                 <h1 class="quiz-container__header">{{ getCurrentQuestion.name }}</h1>
                 <p class="quiz-container__desc">{{ getCurrentQuestion.description }}</p>
 
-                <div class="bonuses" >
-                    <p class="bonuses__header">После теста вы получите:</p>
-                    <div v-for="(item, index) in question[0].bonuses" v-bind:key="index" class="bonuses__el">
-                        <img src="../assets/lock.svg" alt="" />
-                        <p>{{item.name}}</p>
+            <div class="bonuses">
+                <p class="bonuses__header">После теста вы получите:</p>
+                <div v-for="(item, index) in question[0].bonuses" v-bind:key="index" class="bonuses__el">
+                    <div class="bonuses__image">
+                        <img class="bonuses__image-img" :src="item.image" alt="">
+                        <img class="bonuses__image-lock" src="../assets/lock.svg" alt="" />
                     </div>
+                    <p>{{item.name}}</p>
                 </div>
+            </div>
 
                 <div class="quiz-container__button" @click="NextQuestion">
                     {{
@@ -141,9 +144,11 @@
                         <div class="imageAndOptions" v-if="getCurrentQuestion.type == 1">
                             <QuizRadioButton
                                 @addElem="addElemCheack"
+                                @ElemEnabled="ElemEnabled"
                                 class="imageAndOptions__options quiz-colom-2"
                                 :options="getCurrentQuestion"
                                 :quiz_id="question[0].id"
+                                :fieldsResult="result[index]"
                             ></QuizRadioButton>
                             <img
                                 v-if="getCurrentQuestion.image != ''"
@@ -154,9 +159,11 @@
                         <div class="imageAndOptions" v-if="getCurrentQuestion.type == 2">
                             <QuizCheckbox
                                 @addElem="addElem"
+                                @ElemEnabled="ElemEnabled"
                                 class="imageAndOptions__options quiz-colom-2"
                                 :options="getCurrentQuestion"
                                 :quiz_id="question[0].id"
+                                :fieldsResult="result[index]"
                             ></QuizCheckbox>
                             <img
                                 v-if="getCurrentQuestion.image != ''"
@@ -167,9 +174,11 @@
                         <div class="imageAndOptions" v-if="getCurrentQuestion.type == 3">
                             <QuizInput
                                 @addElem="addElem"
+                                @ElemEnabled="ElemEnabled"
                                 class="imageAndOptions__options quiz-colom-2"
                                 :options="getCurrentQuestion"
                                 :quiz_id="question[0].id"
+                                :fieldsResult="result[index]"
                             ></QuizInput>
                             <img
                                 v-if="getCurrentQuestion.image != ''"
@@ -180,8 +189,10 @@
                         <div class="imageAndOptions" v-if="getCurrentQuestion.type == 4">
                             <QuizRange
                                 @addElem="addElem"
+                                @ElemEnabled="ElemEnabled"
                                 class="imageAndOptions__options"
                                 :settings="getCurrentQuestion.fields"
+                                :fieldsResult="result[index]"
                             ></QuizRange>
                             <img :src="getCurrentQuestion.imgPath" alt="" />
                         </div>
@@ -194,6 +205,7 @@
                         <div class="imageAndOptions" v-if="getCurrentQuestion.type == 6">
                             <QuizRadioButtonImage
                                 @addElem="addElemCheack"
+                                @ElemEnabled="ElemEnabled"
                                 :class="
                                     getCurrentQuestion.image == ''
                                         ? 'imageAndOptions__options quiz-colom-4'
@@ -201,6 +213,7 @@
                                 "
                                 :options="getCurrentQuestion"
                                 :quiz_id="question[0].id"
+                                :fieldsResult="result[index]"
                             ></QuizRadioButtonImage>
                             <img
                                 v-if="getCurrentQuestion.image != ''"
@@ -211,6 +224,7 @@
                         <div class="imageAndOptions" v-if="getCurrentQuestion.type == 7">
                             <QuizCheackboxImage
                                 @addElem="addElem"
+                                @ElemEnabled="ElemEnabled"
                                 :class="
                                     getCurrentQuestion.image == ''
                                         ? 'imageAndOptions__options quiz-colom-4'
@@ -218,6 +232,7 @@
                                 "
                                 :options="getCurrentQuestion"
                                 :quiz_id="question[0].id"
+                                :fieldsResult="result[index]"
                             ></QuizCheackboxImage>
                             <img
                                 v-if="getCurrentQuestion.image != ''"
@@ -252,10 +267,10 @@
                         :disabled="buttonPrevDisabled"
                         class="then-button"
                     >
-                        {{ question[0].btn_prev != '' ? question[0].btn_prev : 'Далее' }}
+                        {{ question[0].btn_prev != '' ? question[0].btn_prev : 'Назад' }}
                     </button>
                     <button @click="NextQuestion" :disabled="buttonDisabled" class="then-button">
-                        {{ question[0].btn_next != '' ? question[0].btn_next : 'Назад' }}
+                        {{ question[0].btn_next != '' ? question[0].btn_next : 'Далее' }}
                     </button>
                 </div>
             </div>
@@ -279,11 +294,16 @@
             <div class="bonuses bonuses-padding">
                 <p class="bonuses__header">После теста вы получите:</p>
                 <div v-for="(item, index) in question[0].bonuses" v-bind:key="index" class="bonuses__el">
-                    <img src="../assets/lock.svg" alt="" />
+                    <div class="bonuses__image">
+                        <img class="bonuses__image-img" :src="item.image" alt="">
+                        <img class="bonuses__image-lock" src="../assets/lock.svg" alt="" />
+                    </div>
                     <p>{{item.name}}</p>
                 </div>
             </div>
         </div>
+
+        <!-- {{ this.currentQuestion }} -->
     </div>
 </template>
 
@@ -296,7 +316,6 @@ import QuizRange from './QuizRange.vue'
 import QuizCheackboxImage from './QuizCheackboxImage.vue'
 import QuizRadioButtonImage from './QuizRadioButtonImage.vue'
 import QuizTextAndImage from './QuizTextAndImage.vue'
-// import QuizFormFields from './QuizFormFields.vue'
 </script>
 
 <script>
@@ -337,6 +356,10 @@ export default {
             setTimeout(() => {
                 this.NextQuestion()
             }, 500)
+        },
+
+        ElemEnabled(){
+            this.buttonDisabled = false
         },
 
         changeContat(number) {
@@ -404,17 +427,10 @@ export default {
             if (this.currentQuestion <= this.question[0].steps.length - 1) {
                 this.currentQuestion--
                 if (this.currentQuestion != -1) {
-                    this.currentQuestionProcent =
-                        (100 / this.question[0].steps.length) * this.currentQuestion + '%'
-                    // console.log(this.currentQuestion)
-                    this.result[this.currentQuestion - 1] = this.valueObj
-
-                    if (this.question[0].steps[this.currentQuestion].type != 5) {
-                        this.buttonDisabled = true
-                    } else {
-                        this.buttonDisabled = false
-                    }
+                    this.currentQuestionProcent = (100 / this.question[0].steps.length) * this.currentQuestion + '%'
                 }
+
+                this.buttonDisabled = false
                 return
             }
         },
@@ -561,6 +577,30 @@ export default {
 .bonuses {
     margin-bottom: 20px;
 
+    &__image{
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 0 0 0 10px;
+
+        &-lock{
+            width: 20px !important;
+            position: absolute;
+            left: -10px;
+            background-color: #ae2f6a;
+            padding: 3px;
+            border-radius: 50%;
+        }
+
+        &-img {
+            width: 45px;
+            height: 100% !important;
+            object-fit: cover;
+        }
+
+        
+    }
+
     &__header {
         font-weight: 700;
         font-size: 14px;
@@ -574,21 +614,19 @@ export default {
         align-items: center;
         background: #d1398030;
         border-radius: 5px;
-        padding: 10px 10px 10px 10px;
+        min-height: 50px;
         gap: 5px;
         margin-bottom: 10px;
 
-        img {
-            width: 20px;
-            height: 20px;
-            fill: #ae2f6a;
-        }
+    
 
         p {
             font-size: 14px;
             line-height: 1;
+            padding: 0 10px 0 0;
         }
     }
+
 
     &-padding {
         padding: 5px 20px;

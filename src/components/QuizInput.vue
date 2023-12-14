@@ -12,7 +12,7 @@
 <script>
   export default {
         name: 'QuizInput',
-        emits: ['addElem'],
+        emits: ['addElem', 'ElemEnabled'],
         props: {
             options: {
                 type: Object,
@@ -21,6 +21,12 @@
                 }
             },
             quiz_id: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            },
+            fieldsResult: {
                 type: Object,
                 default: () => {
                     return {}
@@ -35,6 +41,14 @@
         methods: {
             actionElem () {
                 this.$emit('addElem', this.data)
+            }
+        },
+        mounted() {
+            if (Object.keys(this.fieldsResult).length != 0) {
+                for(let i = 0; i < this.fieldsResult.value.length; i++){
+                    this.data.value[i] = this.fieldsResult.value[i];
+                }
+                this.$emit('ElemEnabled')
             }
         }
     }

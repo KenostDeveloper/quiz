@@ -2,7 +2,7 @@
     <div class="QuizCheackboxImage">
         <div class="QuizCheackboxImage__item" v-for="(item, index) in options.fields" v-bind:key="index">
             <div @click="select" class="quiz-image-checkbox">
-                <input v-model="data[index]" :value="item.name" v-on:change="actionElem" class="quiz-image-checkbox__input" name="cheackbox_image" type="checkbox" v-bind:id="'image-cheackbox_'+quiz_id+'_'+options.index+'_'+index">
+                <input v-model="data[index]" :value="item.name" v-on:change="actionElem()" class="quiz-image-checkbox__input" name="cheackbox_image" type="checkbox" v-bind:id="'image-cheackbox_'+quiz_id+'_'+options.index+'_'+index">
                 <label class="quiz-image-checkbox__label" v-bind:for="'image-cheackbox_'+quiz_id+'_'+options.index+'_'+index">
                     <img class="quiz-image-checkbox__image" v-bind:src="item.image" alt="">
                     <p v-if="item.name != ''" class="quiz-image-checkbox__text">{{ item.name }}</p>
@@ -15,7 +15,7 @@
 <script>
     export default {
         name: 'QuizCheckboxImage',
-        emits: ['addElem'],
+        emits: ['addElem', 'ElemEnabled'],
         props: {
             options: {
                 type: Object,
@@ -28,7 +28,13 @@
                 default: () => {
                     return {}
                 }
-            } 
+            },
+            fieldsResult: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            }
         },
         data() {
             return{
@@ -38,14 +44,27 @@
         },
         methods: {
             actionElem () {
-                let count = 0
                 for(let i = 0; i < this.data.length; i++){
-                    if(this.data[i]){
-                        this.result.value[count] = this.options.fields[i].name;
-                        count++;
+                    if(this.data[i] != undefined && this.data[i] != false){
+                        this.result.value[i] = this.options.fields[i].name;
+                    }else{
+                        this.result.value[i] = null;
                     }
                 }
+                
                 this.$emit('addElem', this.result)
+            }
+        },
+        mounted() {
+            if (Object.keys(this.fieldsResult).length != 0) {
+                for(let i = 0; i < this.fieldsResult.value.length; i++){
+                    if(this.fieldsResult.value[i] != null){
+                        this.data[i] = true;
+                    }else{
+                        this.data[i] = false;
+                    }
+                }
+                this.$emit('ElemEnabled')
             }
         }
     }

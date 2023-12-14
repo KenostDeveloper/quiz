@@ -19,7 +19,7 @@
 
     export default {
         name: 'QuizRadioImage',
-        emits: ['addElem'],
+        emits: ['addElem', 'ElemEnabled'],
         props: {
             options: {
                 type: Object,
@@ -32,7 +32,13 @@
                 default: () => {
                     return {}
                 }
-            } 
+            },
+            fieldsResult: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            }
         },
         data() {
             return{
@@ -42,6 +48,12 @@
         methods: {
             actionElem () {
                 this.$emit('addElem', this.data)
+            }
+        },
+        mounted() {
+            if (Object.keys(this.fieldsResult).length != 0) {
+                this.data.value[0] = this.fieldsResult.value[0];
+                this.$emit('ElemEnabled')
             }
         }
     }

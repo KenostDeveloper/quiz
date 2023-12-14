@@ -8,9 +8,15 @@
 <script>
     export default {
         name: 'QuizRange',
-        emits: ['addElem'],
+        emits: ['addElem', 'ElemEnabled'],
         props: {
             settings: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            },
+            fieldsResult: {
                 type: Object,
                 default: () => {
                     return {}
@@ -37,6 +43,16 @@
                 this.inputStep = evt.target.step
                 this.inputMinValue = evt.target.min
                 this.cssInputValue = this.inputValue / (this.inputMaxValue / 100) + "%"
+            }
+        },
+        mounted() {
+            if (Object.keys(this.fieldsResult).length != 0) {
+                for(let i = 0; i < this.fieldsResult.value.length; i++){
+                    this.data.value[i] = this.fieldsResult.value[i];
+                    this.cssInputValue = this.fieldsResult.value[i] + "%"
+                    this.inputValue = this.fieldsResult.value[i]
+                    this.$emit('ElemEnabled')
+                }
             }
         }
     }

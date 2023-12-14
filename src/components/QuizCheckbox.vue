@@ -12,7 +12,7 @@
 <script>
     export default {
         name: 'QuizCheckbox',
-        emits: ['addElem'],
+        emits: ['addElem', 'ElemEnabled'],
         props: {
             options: {
                 type: Object,
@@ -21,6 +21,12 @@
                 }
             },
             quiz_id: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            },
+            fieldsResult: {
                 type: Object,
                 default: () => {
                     return {}
@@ -35,14 +41,27 @@
         },
         methods: {
             actionElem () {
-                let count = 0
                 for(let i = 0; i < this.data.length; i++){
-                    if(this.data[i]){
-                        this.result.value[count] = this.options.fields[i].name;
-                        count++;
+                    if(this.data[i] != undefined && this.data[i] != false){
+                        this.result.value[i] = this.options.fields[i].name;
+                    }else{
+                        this.result.value[i] = null;
                     }
                 }
+                
                 this.$emit('addElem', this.result)
+            }
+        },
+        mounted() {
+            if (Object.keys(this.fieldsResult).length != 0) {
+                for(let i = 0; i < this.fieldsResult.value.length; i++){
+                    if(this.fieldsResult.value[i] != null){
+                        this.data[i] = true;
+                    }else{
+                        this.data[i] = false;
+                    }
+                }
+                this.$emit('ElemEnabled')
             }
         }
     }
