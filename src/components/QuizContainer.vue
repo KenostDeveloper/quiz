@@ -139,7 +139,10 @@
                 <div v-for="(item, index) in question[0].steps" v-bind:key="index">
                     <div v-if="index == currentQuestion">
                         <div class="quiz-container__description" v-if="getCurrentQuestion.correction != ''">
-                            <div class="quiz-container__description-text">{{getCurrentQuestion.correction}}</div>
+                            <div class="quiz-container__description-text">
+                                <img src="../assets/mark.svg" alt="">
+                                {{getCurrentQuestion.correction}}
+                            </div>
                         </div>
                         <div class="imageAndOptions" v-if="getCurrentQuestion.type == 1">
                             <QuizRadioButton
@@ -198,8 +201,11 @@
                         </div>
                         <QuizTextAndImage
                             v-if="getCurrentQuestion.type == 5"
+                            @addElemCheack="addElemCheack"
+                            @ElemEnabled="NextElem"
                             :imgPath="getCurrentQuestion.image"
                             :text="getCurrentQuestion.description"
+                            :btn_text="getCurrentQuestion.description_btn != '' ? getCurrentQuestion.description_btn : 'Теперь знаю!'"
                         ></QuizTextAndImage>
 
                         <div class="imageAndOptions" v-if="getCurrentQuestion.type == 6">
@@ -240,7 +246,7 @@
                                 alt=""
                             />
                         </div>
-                        <div class="quiz-container__skip" v-if="getCurrentQuestion.skip == 1">
+                        <div class="quiz-container__skip" v-if="getCurrentQuestion.skip == 1 && getCurrentQuestion.type != 5">
                             <div class="quiz-button-radio">
                                 <input @click="NextQuestionTimeOut" v-on:change="actionElem" class="quiz-button-radio__input" name="radio" id="radio_skip" type="radio">
                                 <label class="quiz-button-radio__label" for="radio_skip">Пропустить</label>
@@ -360,6 +366,12 @@ export default {
 
         ElemEnabled(){
             this.buttonDisabled = false
+        },
+
+        NextElem(){
+            setTimeout(() => {
+                this.NextQuestion()
+            }, 500)
         },
 
         changeContat(number) {
@@ -863,6 +875,21 @@ export default {
     display: flex;
     background-color: #ffffff;
     border-radius: 32px;
+
+    &__description-text{
+
+        display: flex;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        img{
+            width: 18px !important;
+            background-color: #ae2f6a;
+            padding: 3px;
+            border-radius: 50%;
+        }
+    }
 
     &__skip{
         margin-top: 10px;
