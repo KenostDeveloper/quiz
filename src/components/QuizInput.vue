@@ -1,0 +1,99 @@
+<template>
+  <div class="QuizInput">
+    <div v-for="(item, index) in options.fields" v-bind:key="index">
+      <div class="quiz-input">
+          <label  class="quiz-input__label" v-bind:for="'input_'+quiz_id+'_'+options.index+'_'+index">{{ item.label }}</label>
+          <input v-model="data.value[index]" v-on:change="actionElem" :id="'input_'+quiz_id+'_'+options.index+'_'+index" class="quiz-input__input" type="text" v-bind:placeholder="item.placeholder">
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+        name: 'QuizInput',
+        emits: ['addElem', 'ElemEnabled'],
+        props: {
+            options: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            },
+            quiz_id: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            },
+            fieldsResult: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            }
+        },
+        data() {
+            return{
+                data: {value: []}
+            }
+        },
+        methods: {
+            actionElem () {
+                this.$emit('addElem', this.data)
+            }
+        },
+        mounted() {
+            if (Object.keys(this.fieldsResult).length != 0) {
+                for(let i = 0; i < this.fieldsResult.value.length; i++){
+                    this.data.value[i] = this.fieldsResult.value[i];
+                }
+                this.$emit('ElemEnabled')
+            }
+        }
+    }
+</script>
+
+<style scoped lang="scss">
+
+.QuizInput{
+    display: grid;
+    // grid-template-columns: 1fr 1fr;
+    grid-auto-rows: min-content;
+    grid-gap: 16px;
+    padding-bottom: 6px;
+    max-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.quiz-input{
+    display: flex;
+    flex-direction: column;
+    color: #828282;
+    font-size: 16px;
+    // margin-bottom: 16px;
+    
+
+    &__input{
+        width: 100%;
+        padding: 10px 16px;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        position: relative;
+        border-radius: 8px;
+        color: #000000;
+        font-size: 16px;
+        border: 3px solid #c9c9c9;
+        border-bottom: 5px solid #c9c9c9;
+        outline: none;
+    }
+
+    &__label{
+        margin-bottom: 6px;
+        font-size: 18px;
+    }
+}
+
+</style>
